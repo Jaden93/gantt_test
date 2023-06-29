@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <title>Working with 30000 tasks</title>
+  <script src="./codebase/dhtmlxgantt.js"></script>
+  <script type="module" src="./scripts/zoom.js"></script>
+  <script src="./scripts/config.js"></script>
+  <script src="./scripts/layout.js"></script>
+
+  <link rel="stylesheet" href="./codebase/dhtmlxgantt.css" />
+  <link rel="stylesheet" href="./icons/mauro.png" />
+  <link rel="stylesheet" href="./style/general-layout.css" />
+</head>
+
+<body>
+  <div class="demo-main-container">
+    <div class="header gantt-demo-header">
+      <ul class="gantt-controls">
+        <li class="gantt-menu-item">
+          <a data-action="collapseAll"
+            ><img
+              src="https://dhtmlx.com/docs/products/demoApps/advanced-gantt-chart/demo/imgs/ic_collapse_all_24.png"
+            />Collassa</a
+          >
+        </li>
+        <li class="gantt-menu-item gantt-menu-item-last">
+          <a data-action="expandAll"
+            ><img
+              src="https://dhtmlx.com/docs/products/demoApps/advanced-gantt-chart/demo/imgs/ic_expand_all_24.png"
+            />Espandi</a
+          >
+        </li>
+        <li class="gantt-menu-item">
+          <a data-action="undo"
+            ><img
+              src="https://dhtmlx.com/docs/products/demoApps/advanced-gantt-chart/demo/imgs/ic_undo_24.png"
+            />Indietro</a
+          >
+        </li>
+        <li class="gantt-menu-item gantt-menu-item-last">
+          <a data-action="redo"
+            ><img
+              src="https://dhtmlx.com/docs/products/demoApps/advanced-gantt-chart/demo/imgs/ic_redo_24.png"
+            />Avanti</a
+          >
+        </li>
+        <li class="gantt-menu-item">
+          <a data-action="toggleAutoScheduling"
+            ><img
+              src="https://dhtmlx.com/docs/products/demoApps/advanced-gantt-chart/demo/imgs/ic_auto_scheduling_24.png"
+            />Pianificazione automatica</a
+          >
+        </li>
+        <li class="gantt-menu-item">
+          <a data-action="toggleCriticalPath"
+            ><img
+              src="https://dhtmlx.com/docs/products/demoApps/advanced-gantt-chart/demo/imgs/ic_critical_path_24.png"
+            />Parti critiche</a
+          >
+        </li>
+        <li class="gantt-menu-item gantt-menu-item-right">
+          <a data-action="fullscreen"
+            ><img
+              src="https://dhtmlx.com/docs/products/demoApps/advanced-gantt-chart/demo/imgs/ic_fullscreen_24.png"
+            />Fullscreen</a
+          >
+        </li>
+        <!-- <li class="gantt-menu-item gantt-menu-item-right gantt-menu-item-last">
+          <a data-action="zoomToFit"
+            ><img
+              src="https://dhtmlx.com/docs/products/demoApps/advanced-gantt-chart/demo/imgs/ic_zoom_to_fit_24.png"
+            />Zoom per adattare</a
+          >
+        </li> -->
+        <li class="gantt-menu-item gantt-menu-item-right">
+          <a data-action="zoomOut"
+            ><img
+              src="https://dhtmlx.com/docs/products/demoApps/advanced-gantt-chart/demo/imgs/ic_zoom_out.png"
+            />Zoom Out</a
+          >
+        </li>
+        <li class="gantt-menu-item gantt-menu-item-right">
+          <a data-action="zoomIn"
+            ><img
+              src="https://dhtmlx.com/docs/products/demoApps/advanced-gantt-chart/demo/imgs/ic_zoom_in.png"
+            />Zoom In</a
+          >
+        </li>
+
+        <li class="gantt-menu-item">
+          <a data-action="toPNG"
+            ><img
+              src="https://dhtmlx.com/docs/products/demoApps/advanced-gantt-chart/demo/imgs/ic_file_24.png"
+            />Export to PNG</a
+          >
+        </li>
+        <li class="gantt-menu-item">
+          <a data-action="toExcel"
+            ><img
+              src="https://dhtmlx.com/docs/products/demoApps/advanced-gantt-chart/demo/imgs/ic_file_24.png"
+            />Export to Excel</a
+          >
+        </li>
+        <li class="gantt-menu-item">
+          <a data-action="toMSProject"
+            ><img
+              src="https://dhtmlx.com/docs/products/demoApps/advanced-gantt-chart/demo/imgs/ic_file_24.png"
+            />Export to MS Project</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div class="demo-main-content">
+      Filtra per Dipendente:
+      <select class="dropdown_filter">
+        <option value="">Tutti</option>
+      </select>
+      <div id="gantt_here"></div>
+    </div>
+  </div>
+
+  <script src="./data_large.js"></script>
+  <script src="./scripts/logic.js"></script>
+</body>
