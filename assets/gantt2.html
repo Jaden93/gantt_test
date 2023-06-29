@@ -430,10 +430,11 @@
     }
 
     function removeClass(node, className) {
-      node.className = node.className.replace(
-        new RegExp(" *" + className.replace(/\-/g, "\\-"), "g"),
-        ""
-      );
+      if (node)
+        node.className = node.className.replace(
+          new RegExp(" *" + className.replace(/\-/g, "\\-"), "g"),
+          ""
+        );
     }
 
     function getButton(name) {
@@ -1403,10 +1404,10 @@
     gantt.attachEvent("onGanttScroll", function (left, top) {
       const visibleTasks = gantt.getVisibleTaskCount();
       const lastVisibleTask = gantt.getTaskByIndex(visibleTasks - 1);
-
-      if (gantt.getTaskRowNode(lastVisibleTask.id)) {
-        loadTasks();
-      }
+      if (lastVisibleTask)
+        if (gantt.getTaskRowNode(lastVisibleTask.id)) {
+          loadTasks();
+        }
     });
     const initialTasks = taskData.data.slice(0, 500);
     gantt.parse({ data: initialTasks });
