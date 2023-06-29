@@ -1,4 +1,4 @@
-import { gantt } from 'dhtmlx-gantt';
+import { gantt } from '../codebase/dhtmlxgantt';
 
 export const weekScaleTemplate = function (date: any) {
   const dateToStr = gantt.date.date_to_str('%d %D');

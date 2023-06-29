@@ -123,69 +123,68 @@ function refreshZoomBtns() {
     ganttModules.zoomToFit = (function (gantt) {
       let cachedSettings = {};
 
-      // function saveConfig() {
-      //   const config = gantt.config;
-      //   cachedSettings = {};
-      //   cachedSettings.scales = config.scales;
-      //   cachedSettings.template = gantt.templates.date_scale;
-      //   cachedSettings.start_date = config.start_date;
-      //   cachedSettings.end_date = config.end_date;
-      // }
+      function saveConfig() {
+        const config = gantt.config;
+        cachedSettings = {};
+        cachedSettings.scales = config.scales;
+        cachedSettings.template = gantt.templates.date_scale;
+        cachedSettings.start_date = config.start_date;
+        cachedSettings.end_date = config.end_date;
+      }
 
-      // function restoreConfig() {
-      //   applyConfig(cachedSettings);
-      // }
+      function restoreConfig() {
+        applyConfig(cachedSettings);
+      }
 
-      //MOSTRA DATE DA A griglia
-      // function applyConfig(config, dates) {
-      //   if (config.scales[0].date) {
-      //     gantt.templates.date_scale = null;
-      //   } else {
-      //     gantt.templates.date_scale = config.scales[0].template;
-      //   }
+      // MOSTRA DATE DA A griglia
+      function applyConfig(config, dates) {
+        if (config.scales[0].date) {
+          gantt.templates.date_scale = null;
+        } else {
+          gantt.templates.date_scale = config.scales[0].template;
+        }
 
-      //   if (dates && dates.start_date && dates.start_date) {
-      //     gantt.config.start_date = gantt.date.add(
-      //       dates.start_date,
-      //       -1,
-      //       config.scales[0].unit
-      //     );
-      //     gantt.config.end_date = gantt.date.add(
-      //       gantt.date[config.scales[0].unit + "_start"](dates.end_date),
-      //       2,
-      //       config.scales[0].unit
-      //     );
-      //   } else {
-      //     gantt.config.start_date = gantt.config.end_date = null;
-      //   }
-      // }
+        if (dates && dates.start_date && dates.start_date) {
+          gantt.config.start_date = gantt.date.add(
+            dates.start_date,
+            -1,
+            config.scales[0].unit
+          );
+          gantt.config.end_date = gantt.date.add(
+            gantt.date[config.scales[0].unit + "_start"](dates.end_date),
+            2,
+            config.scales[0].unit
+          );
+        } else {
+          gantt.config.start_date = gantt.config.end_date = null;
+        }
+      }
 
-      // function zoomToFit() {
-      //   const project = gantt.getSubtaskDates(),
-      //     areaWidth = gantt.$task.offsetWidth;
-      //   const scaleConfigs = zoomConfig.levels;
+      function zoomToFit() {
+        let areaWidth = gantt.$task.offsetWidth;
+        const scaleConfigs = zoomConfig.levels;
 
-      //   let zoomLevel = 0;
-      //   for (let i = 0; i < scaleConfigs.length; i++) {
-      //     zoomLevel = i;
-      //     const columnCount = getUnitsBetween(
-      //       project.start_date,
-      //       project.end_date,
-      //       scaleConfigs[i].scales[scaleConfigs[i].scales.length - 1].unit,
-      //       scaleConfigs[i].scales[0].step || 1
-      //     );
-      //     if ((columnCount + 2) * gantt.config.min_column_width <= areaWidth) {
-      //       break;
-      //     }
-      //   }
+        let zoomLevel = 0;
+        for (let i = 0; i < scaleConfigs.length; i++) {
+          zoomLevel = i;
+          const columnCount = getUnitsBetween(
+            project.start_date,
+            project.end_date,
+            scaleConfigs[i].scales[scaleConfigs[i].scales.length - 1].unit,
+            scaleConfigs[i].scales[0].step || 1
+          );
+          if ((columnCount + 2) * gantt.config.min_column_width <= areaWidth) {
+            break;
+          }
+        }
 
-      //   if (zoomLevel == scaleConfigs.length) {
-      //     zoomLevel--;
-      //   }
+        if (zoomLevel == scaleConfigs.length) {
+          zoomLevel--;
+        }
 
-      //   applyConfig(scaleConfigs[zoomLevel], project);
-      //   gantt.render();
-      // }
+        applyConfig(scaleConfigs[zoomLevel], project);
+        gantt.render();
+      }
 
       // get number of columns in timeline
 

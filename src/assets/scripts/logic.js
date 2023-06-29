@@ -1,4 +1,4 @@
-  window.ganttModules = {};
+window.ganttModules = {};
 
     function addClass(node, className) {
       node.className += " " + className;
@@ -374,27 +374,30 @@
 
     const dropdownFilter = document.querySelector(".dropdown_filter");
     dropdownFilter.addEventListener("change", function (e) {
+      console.log(e.target)
       updateFilter(e.target.value);
     });
 
     owners.forEach(function (item) {
       const el = document.createElement("option");
-      el.value = item.label;
-      el.innerHTML = item.label;
+      el.value = item.text;
+      el.innerHTML = item.text;
       dropdownFilter.appendChild(el);
     });
     function findById(ownerId) {
       for (let i = 0; i < owners.length; i++) {
-        if (owners[i].key == ownerId) {
+        if (owners[i].id == ownerId) {
           return owners[i];
         }
       }
       return owners[0];
     }
     function colorizeTask(task) {
-      const owner = findById(task.owner_id);
-      task.color = owner.backgroundColor;
-      task.textColor = owner.textColor;
+      if (task.owner[0]?.resource_id) {
+        let owner = findById(task.owner[0].resource_id);
+        task.color = owner.backgroundColor;
+        task.textColor = owner.textColor;
+      }
     }
     gantt.locale.labels.section_template = "Owner";
     gantt.config.lightbox.sections = [
@@ -524,15 +527,43 @@
         resize: true,
         editor: ownerEditor,
         template: function (task) {
-          if (task.owner_id) {
-            const owner = findById(task.owner_id);
-            if (owner.img) {
-              return owner.label + ` <img height=32 src='${owner.img}'>`;
+
+            if (task.type == gantt.config.types.project) {
+                return "";
             }
-          }
-          return owners[0].label;
-        },
+
+            const store = gantt.getDatastore("resource");
+            const assignments = task[gantt.config.resource_property];
+            if (!assignments || !assignments.length) {
+                return "";
+            }
+
+            if (assignments.length == 1 ) {
+              return store.getItem(assignments[0].resource_id)?.text;
+
+            }
+
+            let result = "";
+            assignments.forEach(function (assignment) {
+                const owner = store.getItem(assignment.resource_id);
+                if (!owner)
+                    return ;
+                result += "<div class='owner-text' title='" + owner.text + "'>" + owner.text.substr(0, 1) + "</div>";
+
+            });
+          //  if (task.owner_id) {
+          //   const owner = findById(task.owner_id);
+          //   if (owner.img) {
+          //     return owner.label + ` <img height=32 src='${owner.img}'>`;
+          //   }
+          // }
+
+            return result[0].label
+        }
       },
+      // return owners[0].label;
+        // },
+      // },
       // {
       //   name: "progress",
       //   label: "Progress",
@@ -635,7 +666,7 @@
         const link = gantt.getLink(links[i]);
         labels.push(linksFormatter.format(link));
       }
-      const predecessors = labels.join(", ");
+      // const predecessors = labels.join(", ");
 
       let html =
         "<b>Task:</b> " +
@@ -652,19 +683,6 @@
       return html;
     };
 
-    gantt.config.auto_types = true;
-    gantt.config.date_format = "%d-%m-%Y %H:%i";
-    gantt.config.duration_step = 1;
-    gantt.config.duration_unit = "minute";
-
-    // gantt.config.row_height = 36;
-    //modalità per quando si hanno tante tasks che riguarda il riordinamento
-    gantt.config.order_branch = "marker";
-    gantt.config.order_branch_free = true;
-    gantt.config.grid_resize = true;
-
-    gantt.config.auto_scheduling_strict = true;
-    gantt.config.static_background = true;
 
     gantt.init("gantt_here");
 
@@ -687,10 +705,7 @@
       if (!gantt.isWorkTime(date)) return "week_end";
       return "";
     };
-    gantt.config.branch_loading = true;
-    gantt.config.date_grid = "%Y-%m-%d %H:%i";
 
-    gantt.config.time_step = 1;
     let loadedTasks = 500; // Numero di record già caricati
     const tasksPerLoad = 500; // Numero di record da caricare ad ogni caricamento successivo
 
@@ -703,8 +718,9 @@
     });
 
     function filterCheck(task) {
+      // console.log(task.owner[0].resource_id,filterValue.toLowerCase())
       return (
-        findById(task.owner_id).label.toLowerCase() != filterValue.toLowerCase()
+        findById(task.owner_id).text.toLowerCase() != filterValue.toLowerCase()
       );
     }
 
@@ -717,6 +733,7 @@
 
     gantt.config.open_tree_initially = true;
 
+    //parte di destra
     gantt.templates.rightside_text = function (start, end, task) {
       const percent = `<span>${Math.round(task.progress * 100)}%<span>`;
       let owner = "";
