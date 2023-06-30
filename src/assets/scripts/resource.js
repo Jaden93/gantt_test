@@ -1,6 +1,6 @@
-gantt.attachEvent("onEmptyClick", function (e) {
-    setTimeout(filterByResource, 20)
-});
+// gantt.attachEvent("onEmptyClick", function (e) {
+//     setTimeout(filterByResource, 20)
+// });
 
 let selectedResource = null;
 function filterByResource() {
@@ -10,7 +10,7 @@ function filterByResource() {
 
 function resetResourceFilter() {
     selectedResource = null;
-    gantt.render();navBar
+    gantt.render();
 }
 
 
@@ -27,7 +27,6 @@ gantt.attachEvent("onBeforeTaskDisplay", function (id, task) {
     }
     return true;
 });
-
 
 
 function getResourceAssignments(resourceId) {
@@ -91,7 +90,7 @@ gantt.templates.resource_cell_value = function (start_date, end_date, resource, 
     tasks.forEach(function (item) {
         const assignments = gantt.getResourceAssignments(resource.id, item.id);
         assignments.forEach(function (assignment) {
-            const task = gantt.getTask(assignment.task_id);
+            // const task = gantt.getTask(assignment.task_id);
             result += assignment.value * 1;
         });
     });
@@ -144,7 +143,7 @@ gantt.config.layout = {
 };
 
 const resourcesStore = gantt.createDatastore({
-  name: gantt.config.resource_store,
+    name: gantt.config.resource_store,
     type: "treeDatastore",
     initItem: function (item) {
         item.parent = item.parent || gantt.config.root_id;
@@ -168,4 +167,6 @@ resourcesStore.attachEvent("onParse", function () {
     gantt.updateCollection("people", people);
 });
 
-resourcesStore.parse(owners);
+resourcesStore.parse(
+owners
+);
