@@ -62,10 +62,7 @@ function refreshZoomBtns() {
           name: "months",
           scales: [
             { unit: "month", step: 1, format: "%M" },
-            // { unit: "day", step: 1, format: "%j" },
-            { unit: "five_days", step: 1, format: weekScaleTemplate },
-
-            // { unit: "hour", step: 1, format: "%H:%i" },
+            { unit: "day", step: 1, format: "%j" },
           ],
           round_dnd_dates: false,
           min_column_width: 90,
@@ -79,7 +76,7 @@ function refreshZoomBtns() {
             // { unit: "hour", step: 1, format: "%H:%i" },
           ],
           round_dnd_dates: false,
-          min_column_width: 50,
+          min_column_width: 200,
           scale_height: 60,
         },
       ],

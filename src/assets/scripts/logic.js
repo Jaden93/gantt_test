@@ -269,6 +269,7 @@ window.ganttModules = {};
     const font_width_ratio = 7;
 
     gantt.plugins({
+      grouping : true,
       marker: true,
       fullscreen: true,
       critical_path: true,
@@ -420,16 +421,35 @@ window.ganttModules = {};
     };
 
     gantt.config.columns = [
-      {
-        name: "",
-        width: "30",
-        resize: false,
-        template: function (task) {
-          return (
-            "<span class='gantt_grid_wbs'>" + gantt.getWBSCode(task) + "</span>"
-          );
-        },
-      },
+          {
+        name: "owner", align: "center", width: 75, label: "Lavoratore", template: function (task) {
+            if (task.type == gantt.config.types.project) {
+                return "";
+            }
+
+            const store = gantt.getDatastore("resource");
+            const assignments = task[gantt.config.resource_property];
+
+            if (!assignments || !assignments.length) {
+                return "Unassigned";
+            }
+
+            if (assignments.length == 1) {
+                return store.getItem(assignments[0].resource_id).text;
+            }
+
+            let result = "";
+            assignments.forEach(function (assignment) {
+                const owner = store.getItem(assignment.resource_id);
+                if (!owner)
+                    return;
+                result += "<div class='owner-label' title='" + owner.text + "'>" + owner.text.substr(0, 1) + "</div>";
+
+            });
+
+            return result;
+        }, resize: true
+    },
       {
         name: "text",
         tree: true,
@@ -478,35 +498,7 @@ window.ganttModules = {};
         editor: hourDurationEditor,
         width: 100,
       },
-     {
-        name: "owner", align: "center", width: 75, label: "Owner", template: function (task) {
-            if (task.type == gantt.config.types.project) {
-                return "";
-            }
 
-            const store = gantt.getDatastore("resource");
-            const assignments = task[gantt.config.resource_property];
-
-            if (!assignments || !assignments.length) {
-                return "Unassigned";
-            }
-
-            if (assignments.length == 1) {
-                return store.getItem(assignments[0].resource_id).text;
-            }
-
-            let result = "";
-            assignments.forEach(function (assignment) {
-                const owner = store.getItem(assignment.resource_id);
-                if (!owner)
-                    return;
-                result += "<div class='owner-label' title='" + owner.text + "'>" + owner.text.substr(0, 1) + "</div>";
-
-            });
-
-            return result;
-        }, resize: true
-    },
       // {
       //   name: "progress",
       //   label: "Progress",

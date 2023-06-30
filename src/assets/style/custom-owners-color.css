@@ -1,0 +1,49 @@
+  .gantt_task_line.gantt_resource_1 {
+    background-color: #03a9f4;
+    color: #fff;
+  }
+
+  .gantt_row.gantt_resource_1 .gantt_cell:nth-child(1) .gantt_tree_content {
+    background-color: #03a9f4;
+    color: #fff;
+  }
+
+  .gantt_task_line.gantt_resource_2 {
+    background-color: #f57730;
+    color: #fff;
+  }
+
+  .gantt_row.gantt_resource_2 .gantt_cell:nth-child(1) .gantt_tree_content {
+    background-color: #f57730;
+    color: #fff;
+  }
+
+  .gantt_task_line.gantt_resource_3 {
+    background-color: #e157de;
+    color: #fff;
+  }
+
+  .gantt_row.gantt_resource_3 .gantt_cell:nth-child(1) .gantt_tree_content {
+    background-color: #e157de;
+    color: #fff;
+  }
+
+  .gantt_task_line.gantt_resource_4 {
+    background-color: #78909c;
+    color: #fff;
+  }
+
+  .gantt_row.gantt_resource_4 .gantt_cell:nth-child(1) .gantt_tree_content {
+    background-color: #78909c;
+    color: #fff;
+  }
+
+  .gantt_task_line.gantt_resource_7 {
+    background-color: #8d6e63;
+    color: #fff;
+  }
+
+  .gantt_row.gantt_resource_7 .gantt_cell:nth-child(1) .gantt_tree_content {
+    background-color: #8d6e63;
+    color: #fff;
+  }

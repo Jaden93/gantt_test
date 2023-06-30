@@ -24,4 +24,3 @@ gantt.config.duration_unit = "minute";
     gantt.config.branch_loading = true;
     gantt.config.date_grid = "%Y-%m-%d %H:%i";
 
-    gantt.config.time_step = 1;
