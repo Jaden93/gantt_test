@@ -362,7 +362,7 @@ window.ganttModules = {};
     // });
     //#endregion
 
-    const start = new Date(2023, 4, 29);
+    const start = new Date(2022, 4, 29);
     // gantt.addMarker({
     //   start_date: start,
     //   css: "status_line",
@@ -437,7 +437,6 @@ window.ganttModules = {};
 	labels.column_owner = labels.section_owner = "Owner";
 
     const ownerEditor = { type: "select", map_to: "textColor", options: owners };
-    let filterValue = "";
 
     function updateFilter(owner) {
       filterValue = owner;
@@ -492,7 +491,7 @@ window.ganttModules = {};
 var resourceConfig = {
 		columns: [
 			{
-				name: "name", label: "Name", tree: true, template: function (resource) {
+				name: "name", label: "Name",  tree: true, template: function (resource) {
 					return resource.text;
 				}
 			},
@@ -618,6 +617,7 @@ if (filter_inputs != null) {
 
 
     gantt.config.columns = [
+      { name: "text", label : "ciao", resize: true, width: 300, tree: true },
           {
         name: "owner", align: "center", width: 75, label: "Lavoratore", template: function (task) {
             if (task.type == gantt.config.types.project) {
@@ -647,13 +647,13 @@ if (filter_inputs != null) {
             return result;
         }, resize: true
     },
-      {
-        name: "text",
-        tree: true,
-        width: 190,
-        resize: true,
-        editor: textEditor,
-      },
+      // {
+      //   name: "text",
+      //   tree: true,
+      //   width: 190,
+      //   resize: true,
+      //   editor: textEditor,
+      // },
       {
         label: "Data Inizio",
         name: "start_date",
@@ -876,8 +876,39 @@ gantt.config.layout = {
 			{ view: "scrollbar", id: "scrollHor" }
 		]
 	};
+ var filterValue = "";
+	var delay;
+	gantt.$doFilter = function(value){
+		filterValue = value;
+		clearTimeout(delay);
+		delay = setTimeout(function(){
+			gantt.render();
+			gantt.$root.querySelector("[data-text-filter]").focus();
+		}, 200)
+	}
+	gantt.attachEvent("onBeforeTaskDisplay", function(id, task){
+    if(!filterValue) return true;
 
-    gantt.init("gantt_here");
+		var normalizedText = task.text.toLowerCase();
+		var normalizedValue = filterValue.toLowerCase();
+    console.log(normalizedText.indexOf(normalizedValue) )
+
+		return normalizedText.indexOf(normalizedValue) > -1;
+	});
+	gantt.attachEvent("onGanttRender", function(){
+		gantt.$root.querySelector("[data-text-filter]").value = filterValue;
+	})
+  var textFilter = "<input data-text-filter type='text' oninput='gantt.$doFilter(this.value)'>"
+	gantt.config.columns = [
+		{name: "text", label: textFilter, tree: true, width: '*', resize: true},
+		{name: "start_date", align: "center", resize: true},
+		{name: "duration", align: "center"}
+	];
+
+
+
+  gantt.init("gantt_here");
+    gantt.config.open_tree_initially = true;
 
 	resourcesStore.parse([
 		{ id: 1, text: "QA", parent: null },
@@ -939,7 +970,6 @@ gantt.config.layout = {
       return true;
     });
 
-    gantt.config.open_tree_initially = true;
 
     //parte di destra
     gantt.templates.rightside_text = function (start, end, task) {
