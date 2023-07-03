@@ -438,10 +438,10 @@ window.ganttModules = {};
 
     const ownerEditor = { type: "select", map_to: "textColor", options: owners };
 
-    function updateFilter(owner) {
-      filterValue = owner;
-      gantt.render();
-    }
+    // function updateFilter(owner) {
+    //   filterValue = owner;
+    //   gantt.render();
+    // }
 
     const dateEditor = {
       type: "date",
@@ -910,18 +910,7 @@ gantt.config.layout = {
   gantt.init("gantt_here");
     gantt.config.open_tree_initially = true;
 
-	resourcesStore.parse([
-		{ id: 1, text: "QA", parent: null },
-		{ id: 2, text: "Development", parent: null },
-		{ id: 3, text: "Sales", parent: null },
-		{ id: 4, text: "Other", parent: null },
-		{ id: 5, text: "Unassigned", parent: 4 },
-		{ id: 6, text: "John", parent: 1 },
-		{ id: 7, text: "Mike", parent: 2 },
-		{ id: 8, text: "Anna", parent: 2 },
-		{ id: 9, text: "Bill", parent: 3 },
-		{ id: 10, text: "Floe", parent: 3 }
-	]);
+	resourcesStore.parse(owners);
 
 
 
@@ -948,13 +937,13 @@ gantt.config.layout = {
     let loadedTasks = 500; // Numero di record già caricati
     const tasksPerLoad = 500; // Numero di record da caricare ad ogni caricamento successivo
 
-    gantt.attachEvent("onAfterTaskAdd", function (id, item) {
-      colorizeTask(item);
-    });
+    // gantt.attachEvent("onAfterTaskAdd", function (id, item) {
+    //   colorizeTask(item);
+    // });
 
-    gantt.attachEvent("onAfterTaskUpdate", function (id, item) {
-      colorizeTask(item);
-    });
+    // gantt.attachEvent("onAfterTaskUpdate", function (id, item) {
+    //   colorizeTask(item);
+    // });
 
     function filterCheck(task) {
       // console.log(task.owner[0].resource_id,filterValue.toLowerCase())
@@ -963,12 +952,13 @@ gantt.config.layout = {
       );
     }
 
-    gantt.attachEvent("onBeforeTaskDisplay", function (id, task) {
-      if (filterValue && filterCheck(task)) {
-        return false;
-      }
-      return true;
-    });
+    //da capire perchè è stato aggiunto
+    // gantt.attachEvent("onBeforeTaskDisplay", function (id, task) {
+    //   if (filterValue && filterCheck(task)) {
+    //     return false;
+    //   }
+    //   return true;
+    // });
 
 
     //parte di destra
@@ -1016,8 +1006,8 @@ gantt.config.layout = {
 		iconEl.textContent = iconEl.textContent==checked?unchecked:checked;
 		iconEl.classList.toggle(className);
 	}
-    gantt.batchUpdate(function () {
-      gantt.eachTask(function (task) {
-        colorizeTask(task);
-      });
-    });
+    // gantt.batchUpdate(function () {
+    //   gantt.eachTask(function (task) {
+    //     colorizeTask(task);
+    //   });
+    // });

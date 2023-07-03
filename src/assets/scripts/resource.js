@@ -2,32 +2,32 @@
 //     setTimeout(filterByResource, 20)
 // });
 
-// let selectedResource = null;
-// function filterByResource() {
-//     selectedResource = gantt.getDatastore("resource").getSelectedId();
-//     gantt.render();
-// }
+let selectedResource = null;
+function filterByResource() {
+    selectedResource = gantt.getDatastore("resource").getSelectedId();
+    gantt.render();
+}
 
-// function resetResourceFilter() {
-//     selectedResource = null;
-//     gantt.render();
-// }
+function resetResourceFilter() {
+    selectedResource = null;
+    gantt.render();
+}
 
 
-// gantt.attachEvent("onBeforeTaskDisplay", function (id, task) {
-//     if (selectedResource) {
-//         let showTask = false;
-//         const assignments = gantt.getTaskAssignments(id);
-//         assignments.forEach(function (assignment) {
-//             if (assignment.resource_id == selectedResource) {
-//                 showTask = true;
-//             }
-//         })
-//         return showTask;
-//     }
-//     return true;
-// });
-// gantt.config.reorder_grid_columns = true;
+gantt.attachEvent("onBeforeTaskDisplay", function (id, task) {
+    if (selectedResource) {
+        let showTask = false;
+        const assignments = gantt.getTaskAssignments(id);
+        assignments.forEach(function (assignment) {
+            if (assignment.resource_id == selectedResource) {
+                showTask = true;
+            }
+        })
+        return showTask;
+    }
+    return true;
+});
+gantt.config.reorder_grid_columns = true;
 
 // const resourceConfig = {
 //     columns: [
