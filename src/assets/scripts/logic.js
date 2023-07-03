@@ -18,6 +18,9 @@ window.ganttModules = {};
       );
     }
 
+
+
+
     function highlightButton(name) {
       addClass(getButton(name), "menu-item-active");
     }
@@ -190,76 +193,140 @@ window.ganttModules = {};
         return "weekend";
       }
     };
-    const zoomConfig = {
-      levels: [
-        {
-          name: "minutes",
-          scales: [
-            { unit: "day", step: 1, format: "%j %M" },
-            { unit: "hour", step: 1, format: "%H:%i" },
-            { unit: "minute", step: 10, format: "%i" },
-          ],
-          round_dnd_dates: false,
-          min_column_width: 40,
-          scale_height: 60,
-        },
-        {
-          name: "hours",
-          scales: [
-            // { unit: "day", step: 1, format: "%j" },
-            { unit: "hour", step: 1, format: "%H:%i" },
-            { unit: "minute", step: 30, format: "%i" },
-          ],
-          round_dnd_dates: true,
-          min_column_width: 60,
-          scale_height: 60,
-        },
-        {
-          name: "days",
-          scales: [
-            {
-              unit: "day",
-              step: 1,
-              format: "%j %D",
-              // css: function (date) {
-              //   if (gantt.isWorkTime(date)) {
-              //     console.log(date);
-              //     return "week-end";
-              //   }
-              // },
-            },
-            { unit: "hour", step: 1, format: "%H:%i" },
-          ],
-          round_dnd_dates: false,
-          min_column_width: 60,
-          scale_height: 60,
-        },
-        {
-          name: "months",
-          scales: [
-            { unit: "month", step: 1, format: "%M" },
-            // { unit: "day", step: 1, format: "%j" },
-            { unit: "five_days", step: 1, format: weekScaleTemplate },
 
-            // { unit: "hour", step: 1, format: "%H:%i" },
-          ],
-          round_dnd_dates: false,
-          min_column_width: 90,
-          scale_height: 60,
-        },
-        {
-          name: "years",
-          scales: [
-            { unit: "month", step: 1, format: "%M" },
-            { unit: "day", step: 1, format: "%j" },
-            // { unit: "hour", step: 1, format: "%H:%i" },
-          ],
-          round_dnd_dates: false,
-          min_column_width: 50,
-          scale_height: 60,
-        },
-      ],
-    };
+    //#region original zoomConfig
+    // const zoomConfig = {
+    //   levels: [
+    //     {
+    //       name: "minutes",
+    //       scales: [
+    //         { unit: "day", step: 1, format: "%j %M" },
+    //         { unit: "hour", step: 1, format: "%H:%i" },
+    //         { unit: "minute", step: 10, format: "%i" },
+    //       ],
+    //       round_dnd_dates: false,
+    //       min_column_width: 40,
+    //       scale_height: 60,
+    //     },
+    //     {
+    //       name: "hours",
+    //       scales: [
+    //         // { unit: "day", step: 1, format: "%j" },
+    //         { unit: "hour", step: 1, format: "%H:%i" },
+    //         { unit: "minute", step: 30, format: "%i" },
+    //       ],
+    //       round_dnd_dates: true,
+    //       min_column_width: 60,
+    //       scale_height: 60,
+    //     },
+    //     {
+    //       name: "days",
+    //       scales: [
+    //         {
+    //           unit: "day",
+    //           step: 1,
+    //           format: "%j %D",
+    //           // css: function (date) {
+    //           //   if (gantt.isWorkTime(date)) {
+    //           //     console.log(date);
+    //           //     return "week-end";
+    //           //   }
+    //           // },
+    //         },
+    //         { unit: "hour", step: 1, format: "%H:%i" },
+    //       ],
+    //       round_dnd_dates: false,
+    //       min_column_width: 60,
+    //       scale_height: 60,
+    //     },
+    //     {
+    //       name: "months",
+    //       scales: [
+    //         { unit: "month", step: 1, format: "%M" },
+    //         // { unit: "day", step: 1, format: "%j" },
+    //         { unit: "five_days", step: 1, format: weekScaleTemplate },
+
+    //         // { unit: "hour", step: 1, format: "%H:%i" },
+    //       ],
+    //       round_dnd_dates: false,
+    //       min_column_width: 90,
+    //       scale_height: 60,
+    //     },
+    //     {
+    //       name: "years",
+    //       scales: [
+    //         { unit: "month", step: 1, format: "%M" },
+    //         { unit: "day", step: 1, format: "%j" },
+    //         // { unit: "hour", step: 1, format: "%H:%i" },
+    //       ],
+    //       round_dnd_dates: false,
+    //       min_column_width: 50,
+    //       scale_height: 60,
+    //     },
+    //   ],
+    // };
+    //#endregion
+
+    var zoomConfig = {
+		levels: [
+			{
+				name: "day",
+				scale_height: 27,
+				min_column_width: 80,
+				scales: [
+					{ unit: "day", step: 1, format: "%d %M" }
+				]
+			},
+			{
+				name: "week",
+				scale_height: 50,
+				min_column_width: 50,
+				scales: [
+					{
+						unit: "week", step: 1, format: function (date) {
+							var dateToStr = gantt.date.date_to_str("%d %M");
+							var endDate = gantt.date.add(date, -6, "day");
+							var weekNum = gantt.date.date_to_str("%W")(date);
+							return "#" + weekNum + ", " + dateToStr(date) + " - " + dateToStr(endDate);
+						}
+					},
+					{ unit: "day", step: 1, format: "%j %D" }
+				]
+			},
+			{
+				name: "month",
+				scale_height: 50,
+				min_column_width: 120,
+				scales: [
+					{ unit: "month", format: "%F, %Y" },
+					{ unit: "week", format: "Week #%W" }
+				]
+			},
+			{
+				name: "quarter",
+				height: 50,
+				min_column_width: 90,
+				scales: [
+					{ unit: "month", step: 1, format: "%M" },
+					{
+						unit: "quarter", step: 1, format: function (date) {
+							var dateToStr = gantt.date.date_to_str("%M");
+							var endDate = gantt.date.add(gantt.date.add(date, 3, "month"), -1, "day");
+							return dateToStr(date) + " - " + dateToStr(endDate);
+						}
+					}
+				]
+			},
+			{
+				name: "year",
+				scale_height: 50,
+				min_column_width: 30,
+				scales: [
+					{ unit: "year", step: 1, format: "%Y" }
+				]
+			}
+		]
+	};
     // gantt.config.inherit_scale_class = true;
 
     // gantt.templates.grid_row_class = function (start, end, task) {
@@ -365,8 +432,9 @@ window.ganttModules = {};
       format: "auto",
     });
     const textEditor = { type: "text", map_to: "text" };
-    // const owner = findById(task.owner_id);
-    // gantt.locale.labels.section_priority = "Priority";
+	var labels = gantt.locale.labels;
+	labels.column_priority = labels.section_priority = "Priority";
+	labels.column_owner = labels.section_owner = "Owner";
 
     const ownerEditor = { type: "select", map_to: "textColor", options: owners };
     let filterValue = "";
@@ -420,6 +488,135 @@ window.ganttModules = {};
       max: 1000,
     };
 
+
+var resourceConfig = {
+		columns: [
+			{
+				name: "name", label: "Name", tree: true, template: function (resource) {
+					return resource.text;
+				}
+			},
+			{
+				name: "workload", label: "Workload", template: function (resource) {
+					var tasks;
+					var store = gantt.getDatastore(gantt.config.resource_store),
+						field = gantt.config.resource_property;
+
+					if (store.hasChild(resource.id)) {
+						tasks = gantt.getTaskBy(field, store.getChildren(resource.id));
+					} else {
+						tasks = gantt.getTaskBy(field, resource.id);
+					}
+
+					var totalDuration = 0;
+					for (var i = 0; i < tasks.length; i++) {
+						totalDuration += tasks[i].duration;
+					}
+					return (totalDuration || 0) * 1 + "h";
+				}
+			}
+		],
+	};
+
+	gantt.templates.resource_cell_class = function (start_date, end_date, resource, tasks) {
+		var css = [];
+		css.push("resource_marker");
+		if (tasks.length <= 1) {
+			css.push("workday_ok");
+		} else {
+			css.push("workday_over");
+		}
+		return css.join(" ");
+	};
+
+
+
+	gantt.templates.resource_cell_value = function (start_date, end_date, resource, tasks) {
+		var cell_duration = gantt.calculateDuration({ start_date: start_date, end_date: end_date });
+
+		var result = 0;
+		tasks.forEach(function (item) {
+			var assignments = gantt.getResourceAssignments(resource.id, item.id);
+			assignments.forEach(function (assignment) {
+        var task = gantt.getTask(assignment.task_id);
+				var hours_amount = 0;
+
+				if (+task.start_date <= +start_date && +task.end_date >= +end_date) {
+          hours_amount += cell_duration;
+				}
+
+				else if (+task.start_date <= +start_date && +task.end_date >= +start_date && +task.end_date < +end_date) {
+					var left_duration = gantt.calculateDuration({ start_date: start_date, end_date: task.end_date });
+					hours_amount += left_duration;
+				}
+				//the task is in the right part
+				else if (+task.end_date >= +end_date && +task.start_date >= +start_date && +task.start_date < +end_date) {
+					var right_duration = gantt.calculateDuration({ start_date: task.start_date, end_date: end_date });
+					hours_amount += right_duration;
+				}
+				//the task is inside cell
+				else if (+task.start_date >= +start_date && +task.end_date <= +end_date) {
+					var task_duration = gantt.calculateDuration({ start_date: task.start_date, end_date: task.end_date });
+					hours_amount += task_duration;
+				}
+
+				result += assignment.value * hours_amount;
+			});
+		});
+
+		if (result % 1) {
+			result = Math.round(result * 10) / 10;
+		}
+		return "<div>" + result + "</div>";
+	};
+gantt.serverList("priority", [
+		{key: 1, label: "High"},
+		{key: 2, label: "Normal"},
+		{key: 3, label: "Low"}
+	]);
+var filter_inputs = document.getElementById("filters_wrapper")
+if (filter_inputs != null) {
+
+  filter_inputs  = filter_inputs.getElementsByTagName("input");
+	for (var i = 0; i < filter_inputs.length; i++) {
+		var filter_input = filter_inputs[i];
+
+		// attach event handler to update filters object and refresh data (so filters will be applied)
+		filter_input.onchange = function () {
+			gantt.refreshData();
+			updIcon(this);
+		}
+	}
+
+  //   	gantt.attachEvent("onBeforeTaskDisplay", function (id, task) {
+	// 	for (var i = 0; i < filter_inputs.length; i++) {
+	// 		var filter_input = filter_inputs[i];
+
+
+	// 		if (filter_input.checked) {
+	// 			if (hasPriority(id, filter_input.name)) {
+	// 				return true;
+	// 			}
+	// 		}
+
+	// 	}
+	// 	return false;
+	// });
+  }
+
+	function hasPriority(parent, priority) {
+		if (gantt.getTask(parent).priority == priority)
+			return true;
+
+		var child = gantt.getChildren(parent);
+		for (var i = 0; i < child.length; i++) {
+			if (hasPriority(child[i], priority))
+				return true;
+		}
+		return false;
+	}
+
+
     gantt.config.columns = [
           {
         name: "owner", align: "center", width: 75, label: "Lavoratore", template: function (task) {
@@ -465,6 +662,7 @@ window.ganttModules = {};
         width: 80,
         editor: dateEditor,
       },
+
       {
         name: "duration",
         label: "Durata",
@@ -498,6 +696,13 @@ window.ganttModules = {};
         editor: hourDurationEditor,
         width: 100,
       },
+      {
+			name: "priority", label: "Priority", align: "center", template: function (obj) {
+				if (obj.priority == 1) return "High";
+				if (obj.priority == 2) return "Normal";
+				return "Low";
+			}
+		},
 
       // {
       //   name: "progress",
@@ -618,8 +823,76 @@ window.ganttModules = {};
       // return html;
     };
 
+    var resourcesStore = gantt.createDatastore({
+		name: gantt.config.resource_store,
+		type: "treeDatastore",
+		initItem: function (item) {
+			item.parent = item.parent || gantt.config.root_id;
+			item[gantt.config.resource_property] = item.parent;
+			item.open = true;
+			return item;
+		}
+	});
+
+	resourcesStore.attachEvent("onParse", function () {
+		var people = [];
+		resourcesStore.eachItem(function (res) {
+			if (!resourcesStore.hasChild(res.id)) {
+				var copy = gantt.copy(res);
+				copy.key = res.id;
+				copy.label = res.text;
+				people.push(copy);
+			}
+		});
+		gantt.updateCollection("people", people);
+	});
+	gantt.config.resource_store = "resource";
+	gantt.config.resource_property = "owner";
+	gantt.config.order_branch = true;
+	gantt.config.open_tree_initially = true;
+gantt.config.layout = {
+		css: "gantt_container",
+		rows: [
+			{
+				cols: [
+					{ view: "grid", group: "grids", scrollY: "scrollVer" },
+					{ resizer: true, width: 1 },
+					{ view: "timeline", scrollX: "scrollHor", scrollY: "scrollVer" },
+					{ view: "scrollbar", id: "scrollVer", group: "vertical" }
+				],
+				gravity: 2
+			},
+			{ resizer: true, width: 1 },
+			{
+				config: resourceConfig,
+				cols: [
+					{ view: "resourceGrid", group: "grids", width: 435, scrollY: "resourceVScroll" },
+					{ resizer: true, width: 1 },
+					{ view: "resourceTimeline", scrollX: "scrollHor", scrollY: "resourceVScroll" },
+					{ view: "scrollbar", id: "resourceVScroll", group: "vertical" }
+				],
+				gravity: 1
+			},
+			{ view: "scrollbar", id: "scrollHor" }
+		]
+	};
 
     gantt.init("gantt_here");
+
+	resourcesStore.parse([
+		{ id: 1, text: "QA", parent: null },
+		{ id: 2, text: "Development", parent: null },
+		{ id: 3, text: "Sales", parent: null },
+		{ id: 4, text: "Other", parent: null },
+		{ id: 5, text: "Unassigned", parent: 4 },
+		{ id: 6, text: "John", parent: 1 },
+		{ id: 7, text: "Mike", parent: 2 },
+		{ id: 8, text: "Anna", parent: 2 },
+		{ id: 9, text: "Bill", parent: 3 },
+		{ id: 10, text: "Floe", parent: 3 }
+	]);
+
+
 
     const navBar = document.querySelector(".gantt-controls");
     gantt.event(navBar, "click", function (e) {
@@ -694,13 +967,25 @@ window.ganttModules = {};
       const visibleTasks = gantt.getVisibleTaskCount();
       const lastVisibleTask = gantt.getTaskByIndex(visibleTasks - 1);
 
-      if (gantt.getTaskRowNode(lastVisibleTask.id)) {
+      if (lastVisibleTask && gantt.getTaskRowNode(lastVisibleTask.id)) {
         loadTasks();
       }
     });
     const initialTasks = taskData.data.slice(0, 500);
     gantt.parse({ data: initialTasks });
 
+
+    	function updIcon(el){
+		el.parentElement.classList.toggle("checked_label");
+
+		var iconEl = el.parentElement.querySelector("i"),
+			checked = "check_box",
+			unchecked = "check_box_outline_blank",
+			className = "icon_color";
+
+		iconEl.textContent = iconEl.textContent==checked?unchecked:checked;
+		iconEl.classList.toggle(className);
+	}
     gantt.batchUpdate(function () {
       gantt.eachTask(function (task) {
         colorizeTask(task);

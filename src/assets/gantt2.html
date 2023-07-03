@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-  <title>Working with 30000 tasks</title>
+  <title>EQUADRA KING</title>
   <script src="./codebase/dhtmlxgantt.js"></script>
   <script type="module" src="./scripts/zoom.js"></script>
   <script src="./scripts/config.js"></script>
   <script src="./scripts/layout.js"></script>
   <script src="./scripts/owners.js"></script>
   <script src="./scripts/filterOwners.js"></script>
-
   <link rel="stylesheet" href="./codebase/dhtmlxgantt.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="./icons/mauro.png" />
   <link rel="stylesheet" href="./style/general-layout.css" />
 
@@ -104,6 +104,26 @@
         </li>
       </ul>
     </div>
+    <div class="gantt_control">
+    <div class="filters_wrapper" id="filters_wrapper">
+      <span>Visualizza attività con priorità:</span>
+
+      <label class="checked_label" id="scale1">
+        <input type="checkbox" name="1" value="1" checked>
+        <i class="material-icons icon_color">check_box</i>High
+      </label>
+
+      <label id="scale2">
+        <input type="checkbox" name="2" value="1">
+        <i class="material-icons">check_box_outline_blank</i>Normal
+      </label>
+
+      <label id="scale3">
+        <input type="checkbox" name="3" value="1">
+        <i class="material-icons">check_box_outline_blank</i>Low
+      </label>
+    </div>
+</div>
 
     <div class="demo-main-content">
       <input
@@ -120,9 +140,14 @@
       <select class="dropdown_filter">
         <option value="">Tutti</option>
       </select>
+
       <div id="gantt_here"></div>
     </div>
+	</div>
   </div>
+
+
+
 
   <script src="./data_large.js"></script>
   <script src="./scripts/resource.js"></script>
