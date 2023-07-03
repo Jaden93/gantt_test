@@ -24,3 +24,41 @@ gantt.config.duration_unit = "minute";
     gantt.config.branch_loading = true;
     gantt.config.date_grid = "%Y-%m-%d %H:%i";
 
+
+    gantt.i18n.setLocale({
+    date: {
+        month_full: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+            "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
+        month_short: ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug",
+            "Ago", "Set", "Ott", "Nov", "Dic"],
+        day_full: ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì",
+             "Venerdì", "Sabato"],
+        day_short: ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"]
+    },
+    labels : {
+      new_task: "Nuova attività",
+      section_description: "Descrizione",
+      section_type: "Tipo",
+      section_time: "Periodo di tempo",
+      icon_edit: "Modifica",
+      icon_delete: "Elimina",
+      icon_cancel: "Cancella",
+      icon_details: "Dettagli",
+      icon_save: "Salva",
+    }
+  })
+
+
+//linguaggio locale dinamicamente
+//   gantt.changeLocale = function changeLocale(lang){
+// 	var script = document.createElement("script");
+// 	script.onload = function(){
+// 		this.parentNode.removeChild(this);// remove script from dom in order not to clutter it too much
+//       	gantt.init("gantt_here");
+// 	};
+
+// 	var localeFile = ["locale", lang ? ("_" + lang) : "", ".js"].join("");
+
+// 	script.src = "https://docs.dhtmlx.com/gantt/codebase/locale/" + localeFile;
+// 	document.querySelector("head").appendChild(script);
+// }
