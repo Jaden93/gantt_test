@@ -355,13 +355,13 @@ window.ganttModules = {};
 
     const hourFormatter = gantt.ext.formatters.durationFormatter({
       enter: "hour",
-      store: "minute",
+      store: "hour",
       format: "hour",
       short: true,
     });
     var autoFormatter = gantt.ext.formatters.durationFormatter({
       enter: "day",
-      store: "minute",
+      store: "hour",
       format: "auto",
     });
     const textEditor = { type: "text", map_to: "text" };

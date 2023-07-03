@@ -8,7 +8,7 @@ gantt.config.round_dnd_dates = false;
 //calculates duration in working hours and hides non-working time from the chart
 gantt.config.work_time = true;
 gantt.config.skip_off_time = true;
-gantt.config.duration_unit = "minute";
+gantt.config.duration_unit = "hour";
 
     gantt.config.auto_types = true;
     gantt.config.date_format = "%d-%m-%Y %H:%i";
