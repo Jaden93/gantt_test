@@ -616,107 +616,7 @@ if (filter_inputs != null) {
 	}
 
 
-    gantt.config.columns = [
-      { name: "text", label : "ciao", resize: true, width: 300, tree: true },
-          {
-        name: "owner", align: "center", width: 75, label: "Lavoratore", template: function (task) {
-            if (task.type == gantt.config.types.project) {
-                return "";
-            }
-
-            const store = gantt.getDatastore("resource");
-            const assignments = task[gantt.config.resource_property];
-
-            if (!assignments || !assignments.length) {
-                return "Unassigned";
-            }
-
-            if (assignments.length == 1) {
-                return store.getItem(assignments[0].resource_id).text;
-            }
-
-            let result = "";
-            assignments.forEach(function (assignment) {
-                const owner = store.getItem(assignment.resource_id);
-                if (!owner)
-                    return;
-                result += "<div class='owner-label' title='" + owner.text + "'>" + owner.text.substr(0, 1) + "</div>";
-
-            });
-
-            return result;
-        }, resize: true
-    },
-      // {
-      //   name: "text",
-      //   tree: true,
-      //   width: 190,
-      //   resize: true,
-      //   editor: textEditor,
-      // },
-      {
-        label: "Data Inizio",
-        name: "start_date",
-        align: "center",
-        resize: true,
-        width: 80,
-        editor: dateEditor,
-      },
-
-      {
-        name: "duration",
-        label: "Durata",
-        resize: true,
-        align: "center",
-        template: function (task) {
-          return autoFormatter.format(task.duration);
-        },
-        editor: durationEditor,
-        width: 100,
-      },
-      // {
-      //   name: "dayDuration",
-      //   label: "Duration (days)",
-      //   resize: true,
-      //   align: "center",
-      //   template: function (task) {
-      //     return dayFormatter.format(task.duration);
-      //   },
-      //   editor: dayDurationEditor,
-      //   width: 100,
-      // },
-      {
-        name: "hourDuration",
-        label: "Durata (ore)",
-        resize: true,
-        align: "center",
-        template: function (task) {
-          return hourFormatter.format(task.duration);
-        },
-        editor: hourDurationEditor,
-        width: 100,
-      },
-      {
-			name: "priority", label: "Priority", align: "center", template: function (obj) {
-				if (obj.priority == 1) return "High";
-				if (obj.priority == 2) return "Normal";
-				return "Low";
-			}
-		},
-
-      // {
-      //   name: "progress",
-      //   label: "Progress",
-      //   align: "center",
-      //   width: 80,
-      //   resize: true,
-      //   editor: progressEditor,
-      //   template: function (task) {
-      //     return Math.round(task.progress * 100) + "%";
-      //   },
-      // },
-      { name: "add", width: 44 },
-    ];
+ 
 
     gantt.config.lightbox.sections = [
       {
@@ -891,7 +791,6 @@ gantt.config.layout = {
 
 		var normalizedText = task.text.toLowerCase();
 		var normalizedValue = filterValue.toLowerCase();
-    console.log(normalizedText.indexOf(normalizedValue) )
 
 		return normalizedText.indexOf(normalizedValue) > -1;
 	});
@@ -899,11 +798,114 @@ gantt.config.layout = {
 		gantt.$root.querySelector("[data-text-filter]").value = filterValue;
 	})
   var textFilter = "<input data-text-filter type='text' oninput='gantt.$doFilter(this.value)'>"
-	gantt.config.columns = [
+	// gantt.config.columns = [
+	// 	{name: "text", label: textFilter, tree: true, width: '*', resize: true},
+	// 	{name: "start_date", align: "center", resize: true},
+	// 	{name: "duration", align: "center"}
+	// ]
+
+   gantt.config.columns = [
 		{name: "text", label: textFilter, tree: true, width: '*', resize: true},
-		{name: "start_date", align: "center", resize: true},
-		{name: "duration", align: "center"}
-	];
+          {
+        name: "owner", align: "center", width: 75, label: "Lavoratore", template: function (task) {
+            if (task.type == gantt.config.types.project) {
+                return "";
+            }
+
+            const store = gantt.getDatastore("resource");
+            const assignments = task[gantt.config.resource_property];
+
+            if (!assignments || !assignments.length) {
+                return "Unassigned";
+            }
+
+            if (assignments.length == 1) {
+                return store.getItem(assignments[0].resource_id).text;
+            }
+
+            let result = "";
+            assignments.forEach(function (assignment) {
+                const owner = store.getItem(assignment.resource_id);
+                if (!owner)
+                    return;
+                result += "<div class='owner-label' title='" + owner.text + "'>" + owner.text.substr(0, 1) + "</div>";
+
+            });
+
+            return result;
+        }, resize: true
+    },
+      // {
+      //   name: "text",
+      //   tree: true,
+      //   width: 190,
+      //   resize: true,
+      //   editor: textEditor,
+      // },
+      {
+        label: "Data Inizio",
+        name: "start_date",
+        align: "center",
+        resize: true,
+        width: 80,
+        editor: dateEditor,
+      },
+
+      {
+        name: "duration",
+        label: "Durata",
+        resize: true,
+        align: "center",
+        template: function (task) {
+          return autoFormatter.format(task.duration);
+        },
+        editor: durationEditor,
+        width: 100,
+      },
+      // {
+      //   name: "dayDuration",
+      //   label: "Duration (days)",
+      //   resize: true,
+      //   align: "center",
+      //   template: function (task) {
+      //     return dayFormatter.format(task.duration);
+      //   },
+      //   editor: dayDurationEditor,
+      //   width: 100,
+      // },
+      {
+        name: "hourDuration",
+        label: "Durata (ore)",
+        resize: true,
+        align: "center",
+        template: function (task) {
+          return hourFormatter.format(task.duration);
+        },
+        editor: hourDurationEditor,
+        width: 100,
+      },
+      {
+			name: "priority", label: "Priority", align: "center", template: function (obj) {
+				if (obj.priority == 1) return "High";
+				if (obj.priority == 2) return "Normal";
+				return "Low";
+			}
+		},
+
+      // {
+      //   name: "progress",
+      //   label: "Progress",
+      //   align: "center",
+      //   width: 80,
+      //   resize: true,
+      //   editor: progressEditor,
+      //   template: function (task) {
+      //     return Math.round(task.progress * 100) + "%";
+      //   },
+      // },
+      { name: "add", width: 44 },
+    ];
+
 
 
 
@@ -972,30 +974,59 @@ gantt.config.layout = {
       return owner + percent;
     };
 
-    function loadTasks() {
-      const startIndex = loadedTasks;
-      const endIndex = startIndex + tasksPerLoad;
-      const newTasks = taskData.data.slice(startIndex, endIndex);
 
-      if (newTasks.length > 0) {
-        gantt.parse({ data: newTasks, links: newTasks.links });
-        loadedTasks += newTasks.length;
-      }
+let totalDataCount = 30000; // Numero totale di dati
+let pageSize = 5000; // Numero di dati da caricare per chiamata
+let currentPage = 1; // Pagina corrente
+
+// var startIndex = (currentPage - 1) * pageSize;
+// var endIndex = startIndex + pageSize;
+// ?pageSize=' + pageSize
+// var pageData = data.slice(startIndex, endIndex);
+
+// Carica i dati nella libreria dhtmlx-gantt utilizzando gantt.parse()
+function loadGanttData() {
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', '../assets/data_records.js', true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      gantt.parse({ data: data });
     }
+  };
+  xhr.send();
+}
 
-    gantt.attachEvent("onGanttScroll", function (left, top) {
-      const visibleTasks = gantt.getVisibleTaskCount();
-      const lastVisibleTask = gantt.getTaskByIndex(visibleTasks - 1);
+gantt.load('../assets/data_records.js', 'json');
+// var dp = gantt.createDataProcessor({
+//     url: "../assets/data_records.js",
+//     mode: "REST"
+// });
 
-      if (lastVisibleTask && gantt.getTaskRowNode(lastVisibleTask.id)) {
-        loadTasks();
-      }
-    });
-    const initialTasks = taskData.data.slice(0, 500);
-    gantt.parse({ data: initialTasks });
+      // currentPage++;
+
+      // Se ci sono ancora dati da caricare, richiama la funzione loadGanttData()
+      // if (currentPage <= Math.ceil(totalDataCount / pageSize)) {
+      //   loadGanttData(pageSize);
+      // }
+
+// Inizializza il grafico di Gantt
+// gantt.init('gantt_container');
+
+// Avvia il caricamento progressivo dei dati
+// loadGanttData(pageSize);
 
 
-    	function updIcon(el){
+
+
+
+
+        // gantt.parse({ data: taskData.data });
+
+  // loadGanttData()
+
+    function updIcon(el){
 		el.parentElement.classList.toggle("checked_label");
 
 		var iconEl = el.parentElement.querySelector("i"),
@@ -1005,7 +1036,10 @@ gantt.config.layout = {
 
 		iconEl.textContent = iconEl.textContent==checked?unchecked:checked;
 		iconEl.classList.toggle(className);
-	}
+	
+  }
+
+
     // gantt.batchUpdate(function () {
     //   gantt.eachTask(function (task) {
     //     colorizeTask(task);
