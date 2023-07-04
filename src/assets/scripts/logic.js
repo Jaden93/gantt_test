@@ -616,7 +616,7 @@ if (filter_inputs != null) {
 	}
 
 
- 
+
 
     gantt.config.lightbox.sections = [
       {
@@ -998,7 +998,8 @@ function loadGanttData() {
   xhr.send();
 }
 
-gantt.load('../assets/data_records.js', 'json');
+gantt.load('http://localhost:1337/data');
+// gantt.load('../assets/data_records.js', 'json');
 // var dp = gantt.createDataProcessor({
 //     url: "../assets/data_records.js",
 //     mode: "REST"
@@ -1036,7 +1037,7 @@ gantt.load('../assets/data_records.js', 'json');
 
 		iconEl.textContent = iconEl.textContent==checked?unchecked:checked;
 		iconEl.classList.toggle(className);
-	
+
   }
 
 
