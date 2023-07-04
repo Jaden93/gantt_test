@@ -71,6 +71,7 @@ function refreshZoomBtns() {
         {
           name: "years",
           scales: [
+            { unit: "year", step: 1, format: "%Y" },
             { unit: "month", step: 1, format: "%M" },
             { unit: "five_days", step: 1, format: weekScaleTemplate },
             // { unit: "hour", step: 1, format: "%H:%i" },
