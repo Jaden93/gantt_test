@@ -13,7 +13,7 @@ gantt.config.duration_unit = "hour";
 gantt.config.fit_tasks = true;
 
     gantt.config.auto_types = true;
-    gantt.config.date_format = "%d-%m-%Y %H:%i";
+    gantt.config.date_format = "%Y-%m-%d %H:%i";
     // gantt.config.date_format = "%Y-%m-%d %H:%i:%s";
 
     gantt.config.duration_step = 1;

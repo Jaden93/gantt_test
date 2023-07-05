@@ -794,9 +794,9 @@ gantt.config.layout = {
 
 		return normalizedText.indexOf(normalizedValue) > -1;
 	});
-	gantt.attachEvent("onGanttRender", function(){
-		gantt.$root.querySelector("[data-text-filter]").value = filterValue;
-	})
+	// gantt.attachEvent("onGanttRender", function(){
+	// 	gantt.$root.querySelector("[data-text-filter]").value = filterValue;
+	// })
   var textFilter = "<input data-text-filter type='text' oninput='gantt.$doFilter(this.value)'>"
 	// gantt.config.columns = [
 	// 	{name: "text", label: textFilter, tree: true, width: '*', resize: true},
@@ -804,112 +804,111 @@ gantt.config.layout = {
 	// 	{name: "duration", align: "center"}
 	// ]
 
-   gantt.config.columns = [
-		{name: "text", label: textFilter, tree: true, width: '*', resize: true},
-          {
-        name: "owner", align: "center", width: 75, label: "Lavoratore", template: function (task) {
-            if (task.type == gantt.config.types.project) {
-                return "";
-            }
+  //  gantt.config.columns = [
+	// 	{name: "text", label: textFilter, tree: true, width: '*', resize: true},
+  //         {
+  //       name: "owner", align: "center", width: 75, label: "Lavoratore", template: function (task) {
+  //           if (task.type == gantt.config.types.project) {
+  //               return "";
+  //           }
 
-            const store = gantt.getDatastore("resource");
-            const assignments = task[gantt.config.resource_property];
+  //           const store = gantt.getDatastore("resource");
+  //           const assignments = task[gantt.config.resource_property];
 
-            if (!assignments || !assignments.length) {
-                return "Unassigned";
-            }
+  //           if (!assignments || !assignments.length) {
+  //               return "Unassigned";
+  //           }
 
-            if (assignments.length == 1) {
-                return store.getItem(assignments[0].resource_id).text;
-            }
+  //           if (assignments.length == 1) {
+  //               return store.getItem(assignments[0].resource_id).text;
+  //           }
 
-            let result = "";
-            assignments.forEach(function (assignment) {
-                const owner = store.getItem(assignment.resource_id);
-                if (!owner)
-                    return;
-                result += "<div class='owner-label' title='" + owner.text + "'>" + owner.text.substr(0, 1) + "</div>";
+  //           let result = "";
+  //           assignments.forEach(function (assignment) {
+  //               const owner = store.getItem(assignment.resource_id);
+  //               if (!owner)
+  //                   return;
+  //               result += "<div class='owner-label' title='" + owner.text + "'>" + owner.text.substr(0, 1) + "</div>";
 
-            });
+  //           });
 
-            return result;
-        }, resize: true
-    },
-      // {
-      //   name: "text",
-      //   tree: true,
-      //   width: 190,
-      //   resize: true,
-      //   editor: textEditor,
-      // },
-      {
-        label: "Data Inizio",
-        name: "start_date",
-        align: "center",
-        resize: true,
-        width: 80,
-        editor: dateEditor,
-      },
+  //           return result;
+  //       }, resize: true
+  //   },
+  //     // {
+  //     //   name: "text",
+  //     //   tree: true,
+  //     //   width: 190,
+  //     //   resize: true,
+  //     //   editor: textEditor,
+  //     // },
+  //     {
+  //       label: "Data Inizio",
+  //       name: "start_date",
+  //       align: "center",
+  //       resize: true,
+  //       width: 80,
+  //       editor: dateEditor,
+  //     },
 
-      {
-        name: "duration",
-        label: "Durata",
-        resize: true,
-        align: "center",
-        template: function (task) {
-          return autoFormatter.format(task.duration);
-        },
-        editor: durationEditor,
-        width: 100,
-      },
-      // {
-      //   name: "dayDuration",
-      //   label: "Duration (days)",
-      //   resize: true,
-      //   align: "center",
-      //   template: function (task) {
-      //     return dayFormatter.format(task.duration);
-      //   },
-      //   editor: dayDurationEditor,
-      //   width: 100,
-      // },
-      {
-        name: "hourDuration",
-        label: "Durata (ore)",
-        resize: true,
-        align: "center",
-        template: function (task) {
-          return hourFormatter.format(task.duration);
-        },
-        editor: hourDurationEditor,
-        width: 100,
-      },
-      {
-			name: "priority", label: "Priority", align: "center", template: function (obj) {
-				if (obj.priority == 1) return "High";
-				if (obj.priority == 2) return "Normal";
-				return "Low";
-			}
-		},
+  //     {
+  //       name: "duration",
+  //       label: "Durata",
+  //       resize: true,
+  //       align: "center",
+  //       template: function (task) {
+  //         return autoFormatter.format(task.duration);
+  //       },
+  //       editor: durationEditor,
+  //       width: 100,
+  //     },
+  //     // {
+  //     //   name: "dayDuration",
+  //     //   label: "Duration (days)",
+  //     //   resize: true,
+  //     //   align: "center",
+  //     //   template: function (task) {
+  //     //     return dayFormatter.format(task.duration);
+  //     //   },
+  //     //   editor: dayDurationEditor,
+  //     //   width: 100,
+  //     // },
+  //     {
+  //       name: "hourDuration",
+  //       label: "Durata (ore)",
+  //       resize: true,
+  //       align: "center",
+  //       template: function (task) {
+  //         return hourFormatter.format(task.duration);
+  //       },
+  //       editor: hourDurationEditor,
+  //       width: 100,
+  //     },
+  //     {
+	// 		name: "priority", label: "Priority", align: "center", template: function (obj) {
+	// 			if (obj.priority == 1) return "High";
+	// 			if (obj.priority == 2) return "Normal";
+	// 			return "Low";
+	// 		}
+	// 	},
 
-      // {
-      //   name: "progress",
-      //   label: "Progress",
-      //   align: "center",
-      //   width: 80,
-      //   resize: true,
-      //   editor: progressEditor,
-      //   template: function (task) {
-      //     return Math.round(task.progress * 100) + "%";
-      //   },
-      // },
-      { name: "add", width: 44 },
-    ];
-
-
+  //     // {
+  //     //   name: "progress",
+  //     //   label: "Progress",
+  //     //   align: "center",
+  //     //   width: 80,
+  //     //   resize: true,
+  //     //   editor: progressEditor,
+  //     //   template: function (task) {
+  //     //     return Math.round(task.progress * 100) + "%";
+  //     //   },
+  //     // },
+  //     { name: "add", width: 44 },
+  //   ];
 
 
-  gantt.init("gantt_here");
+
+
     gantt.config.open_tree_initially = true;
 
 	resourcesStore.parse(owners);
@@ -997,9 +996,13 @@ function loadGanttData() {
   };
   xhr.send();
 }
-
+gantt.init("gantt_here");
 gantt.load('http://localhost:1337/data');
-// gantt.load('../assets/data_records.js', 'json');
+const dp = new gantt.dataProcessor("http://localhost:1337/data");
+dp.init(gantt);
+dp.setTransactionMode("REST");
+
+// // gantt.load('../assets/data_records.js', 'json');
 // var dp = gantt.createDataProcessor({
 //     url: "../assets/data_records.js",
 //     mode: "REST"
