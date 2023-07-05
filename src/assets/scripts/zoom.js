@@ -127,7 +127,7 @@ function refreshZoomBtns() {
         cachedSettings.scales = config.scales;
         cachedSettings.template = gantt.templates.date_scale;
         cachedSettings.start_date = config.start_date;
-        cachedSettings.end_date = config.end_date;
+        // cachedSettings.end_date = config.end_date;
       }
 
       function restoreConfig() {
@@ -148,11 +148,11 @@ function refreshZoomBtns() {
             -1,
             config.scales[0].unit
           );
-          gantt.config.end_date = gantt.date.add(
-            gantt.date[config.scales[0].unit + "_start"](dates.end_date),
-            2,
-            config.scales[0].unit
-          );
+          // gantt.config.end_date = gantt.date.add(
+          //   gantt.date[config.scales[0].unit + "_start"](dates.end_date),
+          //   2,
+          //   config.scales[0].unit
+          // );
         } else {
           gantt.config.start_date = gantt.config.end_date = null;
         }
@@ -167,7 +167,7 @@ function refreshZoomBtns() {
           zoomLevel = i;
           const columnCount = getUnitsBetween(
             project.start_date,
-            project.end_date,
+            // project.end_date,
             scaleConfigs[i].scales[scaleConfigs[i].scales.length - 1].unit,
             scaleConfigs[i].scales[0].step || 1
           );

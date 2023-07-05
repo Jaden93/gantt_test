@@ -10,10 +10,12 @@ gantt.config.round_dnd_dates = false;
 gantt.config.work_time = true;
 gantt.config.skip_off_time = true;
 gantt.config.duration_unit = "hour";
-gantt.config.fit_tasks = true; 
+gantt.config.fit_tasks = true;
 
     gantt.config.auto_types = true;
     gantt.config.date_format = "%d-%m-%Y %H:%i";
+    // gantt.config.date_format = "%Y-%m-%d %H:%i:%s";
+
     gantt.config.duration_step = 1;
 
     //modalità per quando si hanno tante tasks che riguarda il riordinamento
