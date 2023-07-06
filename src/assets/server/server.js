@@ -33,19 +33,37 @@ const pool = new sql.ConnectionPool(config);
 require("date-format-lite");
 
 
+// async function executeQuery(query, params) {
+//   const pool = new sql.ConnectionPool(config);
+
+//   try {
+//     await pool.connect();
+
+//     const request = pool.request();
+//     if (params) {
+//       Object.keys(params).forEach(key => {
+//         request.input(key, params[key]);
+//       });
+//     }
+
+//     const result = await request.query(query);
+
+//     return result;
+//   } catch (error) {
+//     throw error;
+//   } finally {
+//     pool.close();
+//   }
+// }
+
 // Endpoint per ottenere i dati dalla tabella sqlo.gantt_tasks
 app.get('/data', async (req, res) => {
   try {
-    await sql.connect(config);
-
-
+    await pool.connect();
     Promise.all([
-      await sql.query('SELECT * FROM gantt_tasks'),
-      await sql.query('SELECT * FROM gantt_links')
+      await pool.query('SELECT * FROM gantt_tasks'),
+      await pool.query('SELECT * FROM gantt_links')
     ]).then(results => {
-            // let tasks = results[0],
-                // links = results[1];
-
           let recordset = results[0].recordset
                 for (let i = 0; i < recordset.length; i++) {
               recordset[i].start_date = recordset[i].start_date.format("YYYY-MM-DD hh:mm:ss")
@@ -59,24 +77,42 @@ app.get('/data', async (req, res) => {
                 });
               })
     // Chiusura della connessione al database
-    await sql.close();
+    await pool.close();
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
   }
 });
 
-// app.all(/data/,function (req,res,next) {
-//   console.log('n'+req.method +" " + req.url + "--->" + JSON.stringify(req.body, 't',2))
-//   res.status(200).end()
-// })
+//non funziona
+// app.post("/data/task", async(req,res) => {
+//   try {
+
+
+//     const query = "INSERT INTO gantt_tasks (text, start_date, duration, progress, parent) VALUES (@text, @start_date, @duration, @progress, @parent)"
+//     const request = pool.request();
+//     let task = getTask(req.params);
+
+//     const params = {
+//       text : request.input("text", sql.VarChar(255), task.text),
+//       start_date : request.input("start_date", sql.DateTime, task.start_date),
+//       duration :     request.input("duration", sql.Int, task.duration),
+//       progress :     request.input("progress", sql.Float, task.progress),
+//       parent :     request.input("parent", sql.Int, task.parent)
+//     };
+
+//     await executeQuery(query, params);
+//     console.log('Dati inseriti correttamente.');
+//   } catch (error) {
+//     console.error('Si è verificato un errore:', error);
+//   }
+// });
 
 // add a new task
 app.post("/data/task", async (req, res) => {
   try {
     // Creazione della connessione al database
     let task = getTask(req.body);
-    await pool.connect();
     const request = pool.request();
     request.input("text", sql.VarChar(255), task.text)
     request.input("start_date", sql.DateTime, task.start_date)
@@ -90,53 +126,54 @@ app.post("/data/task", async (req, res) => {
     );
     // Chiusura della connessione al database
     await sql.close();
-
-    sendResponse(res, "inserted", result.insertId);
+    sendResponse(res, "inserted", result.insertId)
   } catch (error) {
     sendResponse(res, "error", null, error);
   }
 });
-// app.post("/data/task", async (req, res) => {
-//     let task = getTask(req.body);
-//     await sql.connect(config);
-
-//     sql.query("INSERT INTO gantt_tasks(text, start_date, duration, progress, parent) VALUES (?,?,?,?,?)",
-//         [task.text, task.start_date, task.duration, task.progress, task.parent])
-//     .then(async result => {
-//         sendResponse(res, "inserted", result.insertId);
-//     })
-//     .catch(error => {
-//         sendResponse(res, "error", null, error);
-//     });
-
-// });
-
 // update a task
-app.put("/data/task/:id", (req, res) => {
+app.put("/data/task/:id", async (req, res) => {
+  try {
   let sid = req.params.id,
   task = getTask(req.params);
-  sql.query("UPDATE gantt_tasks SET text = ?, start_date = ?, "
-        + "duration = ?, progress = ?, parent = ? WHERE id = ?",
-        [task.text, task.start_date, task.duration, task.progress, task.parent, sid])
-    .then(result => {
-        sendResponse(res, "updated");
-    })
-    .catch(error => {
+  await pool.connect();
+  const request = pool.request();
+    request.input("text", sql.VarChar(255), task.text)
+    request.input("start_date", sql.DateTime, task.start_date)
+    request.input("duration", sql.Int, task.duration)
+    request.input("progress", sql.Float, task.progress)
+    request.input("parent", sql.Int, task.parent)
+
+    const result = await request.query(
+      "INSERT INTO gantt_tasks (text, start_date, duration, progress, parent) VALUES (@text, @start_date, @duration, @progress, @parent)",
+
+    );
+    await pool.close();
+    sendResponse(res, "updated", result.insertId);
+  }
+  catch(error) {
         sendResponse(res, "error", null, error);
-    });
+    };
 });
 
 
-// delete a task
-app.delete("/data/task/:id", (req, res) => {
+app.delete("/data/task/:id", async (req, res) => {
+  try {
     let sid = req.params.id;
-    sql.query("DELETE FROM gantt_tasks WHERE id = ?", [sid])
-    .then(result => {
-        sendResponse(res, "deleted");
-    })
-    .catch(error => {
-        sendResponse(res, "error", null, error);
-    });
+    await pool.connect();
+
+    const request = pool.request();
+    request.input('id', sql.VarChar, sid);
+
+    const result = await request.query("DELETE FROM gantt_tasks WHERE id = @id");
+    console.log(result);
+
+    await pool.close();
+    sendResponse(res, "updated", result.rowsAffected[0]);
+    console.log("Dati correttamenti inviati");
+  } catch (error) {
+    sendResponse(res, "error", null, error);
+  }
 });
 
 // add a link
@@ -170,17 +207,21 @@ app.put("/data/link/:id", (req, res) => {
 
 // delete a link
 app.delete("/data/link/:id", (req, res) => {
+  try {
     let sid = req.params.id;
-    sql.query("DELETE FROM gantt_links WHERE id = ?", [sid])
-    .then(result => {
-        sendResponse(res, "deleted");
-    })
-    .catch(error => {
-        sendResponse(res, "error", null, error);
-    });
+    pool.connect()
+    const result = pool.query("DELETE FROM gantt_links WHERE id = ?", [sid])
+    pool.close()
+    sendResponse(res, "deleted");
+  } catch (error) {
+    sendResponse(res, "error", null, error);
+  }
 });
 
-
+// app.all(/data/,function (req,res,next) {
+//   console.log('n'+req.method +" " + req.url + "--->" + JSON.stringify(req.body, 't',2))
+//   res.status(200).end()
+// })
 
 function getTask(data) {
     return {

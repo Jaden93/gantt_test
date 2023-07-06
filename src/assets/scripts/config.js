@@ -25,7 +25,7 @@ gantt.config.fit_tasks = true;
 
     gantt.config.auto_scheduling_strict = true;
     gantt.config.static_background = true;
-    gantt.config.branch_loading = true;
+    // gantt.config.branch_loading = true;
     gantt.config.date_grid = "%Y-%m-%d %H:%i";
 
 

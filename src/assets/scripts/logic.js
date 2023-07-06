@@ -996,6 +996,7 @@ function loadGanttData() {
   };
   xhr.send();
 }
+gantt.config.branch_loading = true
 gantt.init("gantt_here");
 gantt.load('http://localhost:1337/data');
 const dp = new gantt.dataProcessor("http://localhost:1337/data");
