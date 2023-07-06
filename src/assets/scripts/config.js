@@ -12,45 +12,45 @@ gantt.config.skip_off_time = true;
 gantt.config.duration_unit = "hour";
 gantt.config.fit_tasks = true;
 
-    gantt.config.auto_types = true;
-    gantt.config.date_format = "%Y-%m-%d %H:%i";
-    // gantt.config.date_format = "%Y-%m-%d %H:%i:%s";
+gantt.config.auto_types = true;
+gantt.config.date_format = "%Y-%m-%d %H:%i";
+// gantt.config.date_format = "%Y-%m-%d %H:%i:%s";
 
-    gantt.config.duration_step = 1;
+gantt.config.duration_step = 1;
 
-    //modalità per quando si hanno tante tasks che riguarda il riordinamento
-    gantt.config.order_branch = "marker";
-    gantt.config.order_branch_free = true;
-    gantt.config.grid_resize = true;
+//modalità per quando si hanno tante tasks che riguarda il riordinamento
+gantt.config.order_branch = "marker";
+gantt.config.order_branch_free = true;
+gantt.config.grid_resize = true;
 
-    gantt.config.auto_scheduling_strict = true;
-    gantt.config.static_background = true;
-    // gantt.config.branch_loading = true;
-    gantt.config.date_grid = "%Y-%m-%d %H:%i";
+gantt.config.auto_scheduling_strict = true;
+gantt.config.static_background = true;
+// gantt.config.branch_loading = true;
+gantt.config.date_grid = "%Y-%m-%d %H:%i";
 
 
-    gantt.i18n.setLocale({
-    date: {
-        month_full: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
-            "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
-        month_short: ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug",
-            "Ago", "Set", "Ott", "Nov", "Dic"],
-        day_full: ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì",
-             "Venerdì", "Sabato"],
-        day_short: ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"]
-    },
-    labels : {
-      new_task: "Nuova attività",
-      section_description: "Descrizione",
-      section_type: "Tipo",
-      section_time: "Periodo di tempo",
-      icon_edit: "Modifica",
-      icon_delete: "Elimina",
-      icon_cancel: "Cancella",
-      icon_details: "Dettagli",
-      icon_save: "Salva",
-    }
-  })
+gantt.i18n.setLocale({
+  date: {
+    month_full: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+      "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
+    month_short: ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug",
+      "Ago", "Set", "Ott", "Nov", "Dic"],
+    day_full: ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì",
+      "Venerdì", "Sabato"],
+    day_short: ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"]
+  },
+  labels: {
+    new_task: "Nuova attività",
+    section_description: "Descrizione",
+    section_type: "Tipo",
+    section_time: "Periodo di tempo",
+    icon_edit: "Modifica",
+    icon_delete: "Elimina",
+    icon_cancel: "Cancella",
+    icon_details: "Dettagli",
+    icon_save: "Salva",
+  }
+})
 
 
 //linguaggio locale dinamicamente

@@ -151,45 +151,71 @@ app.delete("/data/task/:id", async (req, res) => {
 });
 
 // add a link
-app.post("/data/link", (req, res) => {
+app.post("/data/link", async (req, res) => {
+   try {
     let link = getLink(req.body);
+    await pool.connect()
+    const request = pool.request();
+    request.input("source", sql.VarChar(255), link.source);
+    request.input("target", sql.DateTime, link.target);
+    request.input("type", sql.Int, link.type);
 
-    sql.query("INSERT INTO gantt_links(source, target, type) VALUES (?,?,?)",
-        [link.source, link.target, link.type])
-    .then(result => {
-        sendResponse(res, "inserted", result.insertId);
-    })
-    .catch(error => {
-        sendResponse(res, "error", null, error);
-    });
-});
-
-// update a link
-app.put("/data/link/:id", (req, res) => {
-    let sid = req.params.id,
-        link = getLink(req.body);
-
-    sql.query("UPDATE gantt_links SET source = ?, target = ?, type = ? WHERE id = ?",
-        [link.source, link.target, link.type, sid])
-    .then(result => {
-        sendResponse(res, "updated");
-    })
-    .catch(error => {
-        sendResponse(res, "error", null, error);
-    });
-});
-
-// delete a link
-app.delete("/data/link/:id", (req, res) => {
-  try {
-    let sid = req.params.id;
-    pool.connect()
-    const result = pool.query("DELETE FROM gantt_links WHERE id = ?", [sid])
-    pool.close()
-    sendResponse(res, "deleted");
+    const result = await request.query(
+      "INSERT INTO gantt_tasks (source, target, type) VALUES (@source, @target, @type)",
+    );
+    // Chiusura della connessione al database
+    await pool.close();
+    sendResponse(res, "inserted", result.insertId)
   } catch (error) {
     sendResponse(res, "error", null, error);
   }
+});
+
+// update a link
+app.put("/data/link/:id", async (req, res) => {
+   try {
+    let sid = req.params.id;
+    let link = getLink(req.body);
+    await pool.connect();
+    const request = pool.request();
+    request.input("id", sql.VarChar, sid);
+    request.input("source", sql.VarChar(255), link.source);
+    request.input("target", sql.DateTime, link.target);
+    request.input("type", sql.Int, link.type);
+
+    const result = await request.query(`
+      UPDATE gantt_links
+      SET source = @source, target = @target, type = @type WHERE id = @id
+    `);
+
+    await pool.close();
+    sendResponse(res, "updated", result.rowsAffected[0]);
+    console.log("Dati correttamenti inviati");
+  } catch (error) {
+    sendResponse(res, "error", null, error);
+  }
+
+});
+
+// delete a link
+app.delete("/data/link/:id", async (req, res) => {
+    try {
+    let sid = req.params.id;
+    await pool.connect();
+
+    const request = pool.request();
+    request.input('id', sql.VarChar, sid);
+
+    const result = await request.query("DELETE FROM gantt_links WHERE id = @id");
+    console.log(result);
+
+    await pool.close();
+    sendResponse(res, "updated", result.rowsAffected[0]);
+    console.log("Dati correttamenti inviati");
+  } catch (error) {
+    sendResponse(res, "error", null, error);
+  }
+
 });
 
 // app.all(/data/,function (req,res,next) {
