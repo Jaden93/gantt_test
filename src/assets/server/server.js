@@ -36,26 +36,22 @@ require("date-format-lite");
 app.get('/data', async (req, res) => {
   try {
     await pool.connect();
-    Promise.all([
-      await pool.query('SELECT * FROM gantt_tasks'),
-      await pool.query('SELECT * FROM gantt_links')
-    ]).then(results => {
-          let recordset = results[0].recordset
-                for (let i = 0; i < recordset.length; i++) {
-              recordset[i].start_date = recordset[i].start_date.format("YYYY-MM-DD hh:mm:ss")
-              // console.log(tasks.recordset[i].start_date)
-              // tasks.recordset[i].start_date = tasks[i].start_date.format("YYYY-MM-DD hh:mm:ss");
-              recordset[i].open = true;
-            }
-            res.send({
-                    data: recordset
-                });
-              })
-    // Chiusura della connessione al database
-    await pool.close();
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
+      const getTasks = await pool.query('SELECT * FROM gantt_tasks');
+      const getLinks =  await pool.query('SELECT * FROM gantt_links')
+          for (let i = 0; i < getTasks.recordset.length; i++) {
+        getTasks.recordset[i].start_date = getTasks.recordset[i].start_date.format("YYYY-MM-DD hh:mm:ss")
+        // console.log(tasks.recordset[i].start_date)
+        // tasks.recordset[i].start_date = tasks[i].start_date.format("YYYY-MM-DD hh:mm:ss");
+        getTasks.recordset[i].open = false;
+      }
+      await pool.close();
+      // sendResponse(res, "inserted", getTasks)
+      res.send({
+        data : getTasks.recordset,
+        links : getLinks.recordset
+      })
+        } catch (error) {
+    sendResponse(res, "error", null, error);
   }
 });
 
@@ -111,7 +107,6 @@ app.put("/data/task/:id", async (req, res) => {
   try {
     let sid = req.params.id;
     let task = getTask(req.body);
-
     await pool.connect();
     const request = pool.request();
     request.input("id", sql.VarChar, sid);
