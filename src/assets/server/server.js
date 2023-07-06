@@ -32,30 +32,6 @@ const pool = new sql.ConnectionPool(config);
 
 require("date-format-lite");
 
-
-// async function executeQuery(query, params) {
-//   const pool = new sql.ConnectionPool(config);
-
-//   try {
-//     await pool.connect();
-
-//     const request = pool.request();
-//     if (params) {
-//       Object.keys(params).forEach(key => {
-//         request.input(key, params[key]);
-//       });
-//     }
-
-//     const result = await request.query(query);
-
-//     return result;
-//   } catch (error) {
-//     throw error;
-//   } finally {
-//     pool.close();
-//   }
-// }
-
 // Endpoint per ottenere i dati dalla tabella sqlo.gantt_tasks
 app.get('/data', async (req, res) => {
   try {
@@ -71,7 +47,6 @@ app.get('/data', async (req, res) => {
               // tasks.recordset[i].start_date = tasks[i].start_date.format("YYYY-MM-DD hh:mm:ss");
               recordset[i].open = true;
             }
-
             res.send({
                     data: recordset
                 });
@@ -123,7 +98,6 @@ app.post("/data/task", async (req, res) => {
 
     const result = await request.query(
       "INSERT INTO gantt_tasks (text, start_date, duration, progress, parent) VALUES (@text, @start_date, @duration, @progress, @parent)",
-
     );
     // Chiusura della connessione al database
     await sql.close();
@@ -136,13 +110,11 @@ app.post("/data/task", async (req, res) => {
 app.put("/data/task/:id", async (req, res) => {
   try {
     let sid = req.params.id;
-    let task = getTask(req.params);
+    let task = getTask(req.body);
 
-    const pool = new sql.ConnectionPool(config);
     await pool.connect();
-    console.log(task)
     const request = pool.request();
-    request.input("id", sql.Int, sid);
+    request.input("id", sql.VarChar, sid);
     request.input("text", sql.VarChar(255), task.text);
     request.input("start_date", sql.DateTime, task.start_date);
     request.input("duration", sql.Int, task.duration);

@@ -267,66 +267,6 @@ window.ganttModules = {};
     // };
     //#endregion
 
-    var zoomConfig = {
-		levels: [
-			{
-				name: "day",
-				scale_height: 27,
-				min_column_width: 80,
-				scales: [
-					{ unit: "day", step: 1, format: "%d %M" }
-				]
-			},
-			{
-				name: "week",
-				scale_height: 50,
-				min_column_width: 50,
-				scales: [
-					{
-						unit: "week", step: 1, format: function (date) {
-							var dateToStr = gantt.date.date_to_str("%d %M");
-							var endDate = gantt.date.add(date, -6, "day");
-							var weekNum = gantt.date.date_to_str("%W")(date);
-							return "#" + weekNum + ", " + dateToStr(date) + " - " + dateToStr(endDate);
-						}
-					},
-					{ unit: "day", step: 1, format: "%j %D" }
-				]
-			},
-			{
-				name: "month",
-				scale_height: 50,
-				min_column_width: 120,
-				scales: [
-					{ unit: "month", format: "%F, %Y" },
-					{ unit: "week", format: "Week #%W" }
-				]
-			},
-			{
-				name: "quarter",
-				height: 50,
-				min_column_width: 90,
-				scales: [
-					{ unit: "month", step: 1, format: "%M" },
-					{
-						unit: "quarter", step: 1, format: function (date) {
-							var dateToStr = gantt.date.date_to_str("%M");
-							var endDate = gantt.date.add(gantt.date.add(date, 3, "month"), -1, "day");
-							return dateToStr(date) + " - " + dateToStr(endDate);
-						}
-					}
-				]
-			},
-			{
-				name: "year",
-				scale_height: 50,
-				min_column_width: 30,
-				scales: [
-					{ unit: "year", step: 1, format: "%Y" }
-				]
-			}
-		]
-	};
     // gantt.config.inherit_scale_class = true;
 
     // gantt.templates.grid_row_class = function (start, end, task) {
@@ -706,21 +646,6 @@ if (filter_inputs != null) {
         const link = gantt.getLink(links[i]);
         labels.push(linksFormatter.format(link));
       }
-      // const predecessors = labels.join(", ");
-
-      // let html =
-      //   "<b>Task:</b> " +
-      //   task.text +
-      //   "<br/><b>Start:</b> " +
-      //   gantt.templates.tooltip_date_format(start) +
-      //   "<br/><b>End:</b> " +
-      //   gantt.templates.tooltip_date_format(end) +
-      //   "<br><b>Duration:</b> " +
-      //   durationFormatter.format(task.duration);
-      // if (predecessors) {
-      //   html += "<br><b>Predecessors:</b>" + predecessors;
-      // }
-      // return html;
     };
 
     var resourcesStore = gantt.createDatastore({
@@ -749,8 +674,7 @@ if (filter_inputs != null) {
 	gantt.config.resource_store = "resource";
 	gantt.config.resource_property = "owner";
 	gantt.config.order_branch = true;
-	gantt.config.open_tree_initially = true;
-gantt.config.layout = {
+  gantt.config.layout = {
 		css: "gantt_container",
 		rows: [
 			{
@@ -984,25 +908,15 @@ let currentPage = 1; // Pagina corrente
 // var pageData = data.slice(startIndex, endIndex);
 
 // Carica i dati nella libreria dhtmlx-gantt utilizzando gantt.parse()
-function loadGanttData() {
-
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', '../assets/data_records.js', true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      var data = JSON.parse(xhr.responseText);
-      gantt.parse({ data: data });
-    }
-  };
-  xhr.send();
-}
+gantt.config.xml_date = "%Y-%m-%d %H:%i:%s";
 gantt.config.branch_loading = true
 gantt.init("gantt_here");
 gantt.load('http://localhost:1337/data');
-const dp = new gantt.dataProcessor("http://localhost:1337/data");
-dp.init(gantt);
-dp.setTransactionMode("REST");
-
+var dp = gantt.createDataProcessor({
+    url: "http://localhost:1337/data",
+    mode: "REST",
+    deleteAfterConfirmation: true
+});
 // // gantt.load('../assets/data_records.js', 'json');
 // var dp = gantt.createDataProcessor({
 //     url: "../assets/data_records.js",
