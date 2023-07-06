@@ -113,6 +113,7 @@ app.post("/data/task", async (req, res) => {
   try {
     // Creazione della connessione al database
     let task = getTask(req.body);
+    await pool.connect()
     const request = pool.request();
     request.input("text", sql.VarChar(255), task.text)
     request.input("start_date", sql.DateTime, task.start_date)
@@ -134,26 +135,32 @@ app.post("/data/task", async (req, res) => {
 // update a task
 app.put("/data/task/:id", async (req, res) => {
   try {
-  let sid = req.params.id,
-  task = getTask(req.params);
-  await pool.connect();
-  const request = pool.request();
-    request.input("text", sql.VarChar(255), task.text)
-    request.input("start_date", sql.DateTime, task.start_date)
-    request.input("duration", sql.Int, task.duration)
-    request.input("progress", sql.Float, task.progress)
-    request.input("parent", sql.Int, task.parent)
+    let sid = req.params.id;
+    let task = getTask(req.params);
 
-    const result = await request.query(
-      "INSERT INTO gantt_tasks (text, start_date, duration, progress, parent) VALUES (@text, @start_date, @duration, @progress, @parent)",
+    const pool = new sql.ConnectionPool(config);
+    await pool.connect();
+    console.log(task)
+    const request = pool.request();
+    request.input("id", sql.Int, sid);
+    request.input("text", sql.VarChar(255), task.text);
+    request.input("start_date", sql.DateTime, task.start_date);
+    request.input("duration", sql.Int, task.duration);
+    request.input("progress", sql.Float, task.progress);
+    request.input("parent", sql.Int, task.parent);
 
-    );
+    const result = await request.query(`
+      UPDATE gantt_tasks
+      SET text = @text, start_date = @start_date, duration = @duration, progress = @progress, parent = @parent
+      WHERE id = @id
+    `);
+
     await pool.close();
-    sendResponse(res, "updated", result.insertId);
+    sendResponse(res, "updated", result.rowsAffected[0]);
+    console.log("Dati correttamenti inviati");
+  } catch (error) {
+    sendResponse(res, "error", null, error);
   }
-  catch(error) {
-        sendResponse(res, "error", null, error);
-    };
 });
 
 
