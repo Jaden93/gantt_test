@@ -61,7 +61,7 @@
       	.gantt_grid_scale .gantt_grid_head_cell,
       	.gantt_task .gantt_task_scale .gantt_scale_cell {
       	  font-weight: bold;
-      	  font-size: 14px;
+      	  font-size: 12px;
       	  color: rgba(0, 0, 0, 0.7);
       	}
 

@@ -2,30 +2,111 @@
 //     setTimeout(filterByResource, 20)
 // });
 
+// var resourceConfig = {
+// 		columns: [
+// 			{
+// 				name: "name", label: "Name",  tree: true, template: function (resource) {
+// 					return resource.text;
+// 				}
+// 			},
+// 			{
+// 				name: "workload", label: "Workload", template: function (resource) {
+// 					var tasks;
+// 					var store = gantt.getDatastore(gantt.config.resource_store),
+// 						field = gantt.config.resource_property;
+
+// 					if (store.hasChild(resource.id)) {
+// 						tasks = gantt.getTaskBy(field, store.getChildren(resource.id));
+// 					} else {
+// 						tasks = gantt.getTaskBy(field, resource.id);
+// 					}
+
+// 					var totalDuration = 0;
+// 					for (var i = 0; i < tasks.length; i++) {
+// 						totalDuration += tasks[i].duration;
+// 					}
+// 					return (totalDuration || 0) * 1 + "h";
+// 				}
+// 			}
+// 		],
+// 	};
+
+// gantt.templates.resource_cell_class = function (start_date, end_date, resource, tasks) {
+// 	var css = [];
+// 	css.push("resource_marker");
+// 	if (tasks.length <= 1) {
+// 		css.push("workday_ok");
+// 	} else {
+// 		css.push("workday_over");
+// 	}
+// 	return css.join(" ");
+// };
+
+
+
+// gantt.templates.resource_cell_value = function (start_date, end_date, resource, tasks) {
+// 	var cell_duration = gantt.calculateDuration({ start_date: start_date, end_date: end_date });
+
+// 	var result = 0;
+// 	tasks.forEach(function (item) {
+// 		var assignments = gantt.getResourceAssignments(resource.id, item.id);
+// 		assignments.forEach(function (assignment) {
+//       var task = gantt.getTask(assignment.task_id);
+// 			var hours_amount = 0;
+
+// 			if (+task.start_date <= +start_date && +task.end_date >= +end_date) {
+//         hours_amount += cell_duration;
+// 			}
+
+// 			else if (+task.start_date <= +start_date && +task.end_date >= +start_date && +task.end_date < +end_date) {
+// 				var left_duration = gantt.calculateDuration({ start_date: start_date, end_date: task.end_date });
+// 				hours_amount += left_duration;
+// 			}
+// 			//the task is in the right part
+// 			else if (+task.end_date >= +end_date && +task.start_date >= +start_date && +task.start_date < +end_date) {
+// 				var right_duration = gantt.calculateDuration({ start_date: task.start_date, end_date: end_date });
+// 				hours_amount += right_duration;
+// 			}
+// 			//the task is inside cell
+// 			else if (+task.start_date >= +start_date && +task.end_date <= +end_date) {
+// 				var task_duration = gantt.calculateDuration({ start_date: task.start_date, end_date: task.end_date });
+// 				hours_amount += task_duration;
+// 			}
+
+// 			result += assignment.value * hours_amount;
+// 		});
+// 	});
+
+// 	if (result % 1) {
+// 		result = Math.round(result * 10) / 10;
+// 	}
+// 	return "<div>" + result + "</div>";
+// };
+
 let selectedResource = null;
 function filterByResource() {
-    selectedResource = gantt.getDatastore("resource").getSelectedId();
-    gantt.render();
+  selectedResource = gantt.getDatastore("resource").getSelectedId();
+  gantt.render();
 }
 
 function resetResourceFilter() {
-    selectedResource = null;
-    gantt.render();
+  selectedResource = null;
+  gantt.render();
 }
 
 
 gantt.attachEvent("onBeforeTaskDisplay", function (id, task) {
-    if (selectedResource) {
-        let showTask = false;
-        const assignments = gantt.getTaskAssignments(id);
-        assignments.forEach(function (assignment) {
-            if (assignment.resource_id == selectedResource) {
-                showTask = true;
-            }
-        })
-        return showTask;
-    }
-    return true;
+  if (selectedResource) {
+    let showTask = false;
+    const assignments = gantt.getTaskAssignments(id);
+    assignments.forEach(function (assignment) {
+      if (assignment.resource_id == selectedResource) {
+        showTask = true;
+      }
+    })
+    return showTask;
+  }
+  return true;
 });
 gantt.config.reorder_grid_columns = true;
 

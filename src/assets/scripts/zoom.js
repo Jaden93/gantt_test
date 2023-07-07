@@ -74,13 +74,13 @@ const zoomConfig = {
       scales: [
         { unit: "year", step: 1, format: "%Y" },
         { unit: "month", step: 1, format: "%M" },
-        { unit: "day", step: 1, format: "%j" },
-        { unit: "hour", step: 1, format: "%H:%i" },
+        { unit: "day", step: 1, format: "%j, %D" },
+        // { unit: "hour", step: 1, format: "%H:%i" },
         // { unit: "five_days", step: 1, format: weekScaleTemplate },
       ],
-      round_dnd_dates: true,
-      min_column_width: 30,
-      scale_height: 40,
+      round_dnd_dates: false,
+      min_column_width: 60,
+      scale_height: 60,
     },
   ],
 };
