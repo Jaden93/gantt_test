@@ -245,7 +245,8 @@
   }
 
   .weekend {
-    background: grey!important;
+    background: rgb(179, 179, 179,0.2)!important;
+    z-index: 2;
   }
 
   .gantt_drag_marker.gantt_grid_resize_area {

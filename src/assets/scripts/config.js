@@ -1,19 +1,36 @@
-// gantt.config.start_date = new Date("2022, 02, 02");
-// gantt.config.end_date = new Date(2022, 03, 25);
-gantt.config.min_column_width = 20;
-gantt.config.row_height = 30;
-gantt.config.scale_height = 20 * 3;
-gantt.config.time_step = 1;
-gantt.config.show_task_cells = true;
-gantt.config.round_dnd_dates = false;
-//calculates duration in working hours and hides non-working time from the chart
-gantt.config.work_time = true;
-gantt.config.duration_unit = "minute";
-gantt.config.date_format = "%Y-%m-%d %H:%i";
-gantt.config.duration_step = 1;
-// gantt.config.correct_work_time = true;
+gantt.plugins({
+  grouping: true,
+  marker: true,
+  fullscreen: true,
+  critical_path: true,
+  auto_scheduling: true,
+  tooltip: true,
+  undo: true,
+  export_api: true,
+});
 
+gantt.config.work_time = true;
+gantt.config.correct_work_time = true; //enables adjusting the task's start and end dates to the work time (while dragging)
+
+gantt.config.min_duration = 60 * 1000;
+gantt.config.min_column_width = 60;
+gantt.config.duration_unit = "minute";
+gantt.config.scale_height = 20 * 3;
+gantt.config.row_height = 30;
+gantt.config.date_format = "%Y-%m-%d %H:%i";
+gantt.config.round_dnd_dates = false; // Avvicina la fase all'intervallo di timescale più vicino
+gantt.config.date_grid = "%Y-%m-%d %H:%i"; // Formato della griglia di sinistra della data
+
+gantt.setWorkTime({ hours: ["9:15-18:00"] });
 // gantt.setWorkTime({ hours: ["8:30-12:30", "13:30-17:30"] });
+gantt.setWorkTime({ day: 7, hours: false });
+gantt.setWorkTime({ day: 6, hours: false });
+gantt.config.duration_step = 1; //sets the number of 'gantt.config.duration_unit' units that will correspond to one unit of the 'duration' data
+gantt.config.time_step = 1; //Step minimo di spostamento task in minuti
+// gantt.config.show_task_cells = true;
+
+
+
 
 // gantt.templates.scale_cell_class = function (date) {
 //   if (!gantt.isWorkTime(date)) {
@@ -42,7 +59,6 @@ gantt.config.duration_step = 1;
 // gantt.config.auto_scheduling_strict = true;
 // gantt.config.static_background = true;
 // gantt.config.branch_loading = true;
-// gantt.config.date_grid = "%Y-%m-%d %H:%i";
 
 
 gantt.i18n.setLocale({
