@@ -45,12 +45,12 @@ const zoomConfig = {
           unit: "day",
           step: 1,
           format: "%j %D",
-          // css: function (date) {
-          //   if (gantt.isWorkTime(date)) {
-          //     console.log(date);
-          //     return "week-end";
-          //   }
-          // },
+          css: function (date) {
+            if (gantt.isWorkTime(date)) {
+              console.log(date);
+              return "week-end";
+            }
+          },
         },
         { unit: "hour", step: 1, format: "%H:%i" },
       ],
@@ -63,6 +63,7 @@ const zoomConfig = {
       scales: [
         { unit: "month", step: 1, format: "%M" },
         { unit: "day", step: 1, format: "%j" },
+        { unit: "hour", step: 1, format: "%H:%i" },
       ],
       round_dnd_dates: false,
       min_column_width: 90,
@@ -72,13 +73,14 @@ const zoomConfig = {
       name: "years",
       scales: [
         { unit: "year", step: 1, format: "%Y" },
-        // { unit: "month", step: 1, format: "%M" },
+        { unit: "month", step: 1, format: "%M" },
+        { unit: "day", step: 1, format: "%j" },
+        { unit: "hour", step: 1, format: "%H:%i" },
         // { unit: "five_days", step: 1, format: weekScaleTemplate },
-        // { unit: "hour", step: 1, format: "%H:%i" },
       ],
-      round_dnd_dates: false,
-      min_column_width: 200,
-      scale_height: 60,
+      round_dnd_dates: true,
+      min_column_width: 30,
+      scale_height: 40,
     },
   ],
 };

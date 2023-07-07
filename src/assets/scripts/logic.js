@@ -166,112 +166,43 @@ const weekScaleTemplate = function (date) {
   const endDate = gantt.date.add(gantt.date.add(date, 5, "day"), -1, "day");
   return dateToStr(date) + " - " + dateToStr(endDate);
 };
-gantt.date.five_days_start = function (date) {
-  return date;
-};
+// gantt.date.five_days_start = function (date) {
+//   return date;
+// };
 
-gantt.date.add_five_days = function (date, inc) {
-  if (inc < 0) {
-    // the first scale cell should start on monday
-    const weekDay = date.getDay();
-    if (weekDay != 1) {
-      const diff = Math.abs(weekDay - 1);
-      return gantt.date.add(date, -diff, "day");
-    }
-  }
-  if (date.getDay() == 0 || date.getDay() == 6) {
-    return gantt.date.add(date, 1 * inc, "day");
-  }
-  gantt.date.week_start(date);
-  return gantt.date.add(date, 5 * inc, "day");
-};
+// gantt.date.add_five_days = function (date, inc) {
+//   if (inc < 0) {
+//     // the first scale cell should start on monday
+//     const weekDay = date.getDay();
+//     if (weekDay != 1) {
+//       const diff = Math.abs(weekDay - 1);
+//       return gantt.date.add(date, -diff, "day");
+//     }
+//   }
+//   if (date.getDay() == 0 || date.getDay() == 6) {
+//     return gantt.date.add(date, 1 * inc, "day");
+//   }
+//   gantt.date.week_start(date);
+//   return gantt.date.add(date, 5 * inc, "day");
+// };
 
 //#endregion
 
-gantt.templates.timeline_cell_class = function (task, date) {
-  if (!gantt.isWorkTime({ date: date, task: task })) {
-    return "weekend";
-  }
-};
+// gantt.templates.timeline_cell_class = function (task, date) {
+//   if (!gantt.isWorkTime({ date: date, task: task })) {
+//     return "weekend";
+//   }
+// };
+
+
 
 //#region original zoomConfig
-// const zoomConfig = {
-//   levels: [
-//     {
-//       name: "minutes",
-//       scales: [
-//         { unit: "day", step: 1, format: "%j %M" },
-//         { unit: "hour", step: 1, format: "%H:%i" },
-//         { unit: "minute", step: 10, format: "%i" },
-//       ],
-//       round_dnd_dates: false,
-//       min_column_width: 40,
-//       scale_height: 60,
-//     },
-//     {
-//       name: "hours",
-//       scales: [
-//         // { unit: "day", step: 1, format: "%j" },
-//         { unit: "hour", step: 1, format: "%H:%i" },
-//         { unit: "minute", step: 30, format: "%i" },
-//       ],
-//       round_dnd_dates: true,
-//       min_column_width: 60,
-//       scale_height: 60,
-//     },
-//     {
-//       name: "days",
-//       scales: [
-//         {
-//           unit: "day",
-//           step: 1,
-//           format: "%j %D",
-//           // css: function (date) {
-//           //   if (gantt.isWorkTime(date)) {
-//           //     console.log(date);
-//           //     return "week-end";
-//           //   }
-//           // },
-//         },
-//         { unit: "hour", step: 1, format: "%H:%i" },
-//       ],
-//       round_dnd_dates: false,
-//       min_column_width: 60,
-//       scale_height: 60,
-//     },
-//     {
-//       name: "months",
-//       scales: [
-//         { unit: "month", step: 1, format: "%M" },
-//         // { unit: "day", step: 1, format: "%j" },
-//         { unit: "five_days", step: 1, format: weekScaleTemplate },
-
-//         // { unit: "hour", step: 1, format: "%H:%i" },
-//       ],
-//       round_dnd_dates: false,
-//       min_column_width: 90,
-//       scale_height: 60,
-//     },
-//     {
-//       name: "years",
-//       scales: [
-//         { unit: "month", step: 1, format: "%M" },
-//         { unit: "day", step: 1, format: "%j" },
-//         // { unit: "hour", step: 1, format: "%H:%i" },
-//       ],
-//       round_dnd_dates: false,
-//       min_column_width: 50,
-//       scale_height: 60,
-//     },
-//   ],
-// };
-//#endregion
 
 // gantt.config.inherit_scale_class = true;
 
-// gantt.templates.grid_row_class = function (start, end, task) {
-//   return gantt.hasChild(task.id) ? "gantt_parent_row" : "";
-// };
+gantt.templates.grid_row_class = function (start, end, task) {
+  return gantt.hasChild(task.id) ? "gantt_parent_row" : "";
+};
 
 const font_width_ratio = 7;
 
@@ -316,7 +247,7 @@ gantt.ext.fullscreen.getFullscreenElement = function () {
 
 const durationFormatter = gantt.ext.formatters.durationFormatter({
   enter: "day",
-  store: "hour",
+  store: "minute",
   format: "auto",
   short: false,
   minutesPerHour: 60,
@@ -362,18 +293,18 @@ const linksFormatter = gantt.ext.formatters.linkFormatter({
 
 const hourFormatter = gantt.ext.formatters.durationFormatter({
   enter: "hour",
-  store: "hour",
+  store: "minute",
   format: "hour",
   short: true,
 });
 var autoFormatter = gantt.ext.formatters.durationFormatter({
   enter: "day",
-  store: "hour",
+  store: "minute",
   format: "auto",
 });
 const textEditor = { type: "text", map_to: "text" };
 var labels = gantt.locale.labels;
-labels.column_priority = labels.section_priority = "Priority";
+labels.column_priority = labels.section_priority = "Priorità";
 labels.column_owner = labels.section_owner = "Owner";
 
 // const ownerEditor = { type: "select", map_to: "textColor", options: owners };
@@ -386,8 +317,8 @@ labels.column_owner = labels.section_owner = "Owner";
 const dateEditor = {
   type: "date",
   map_to: "start_date",
-  min: new Date(2023, 0, 1),
-  max: new Date(2024, 0, 1),
+  min: new Date(2023, 0, 1, 0o0),
+  max: new Date(2024, 0, 1, 0o0),
 };
 const durationEditor = {
   type: "duration",
@@ -556,31 +487,21 @@ function hasPriority(parent, priority) {
 }
 
 
+//modale dell'attivitò
+// gantt.config.lightbox.sections = [
+//   { name: "description", height: 38, map_to: "text", type: "textarea", focus: true },
+//   {
+//     name: "priority",
+//     height: 22,
+//     map_to: "priority",
+//     type: "select",
+//     options: gantt.serverList("priority")
+//   },
+//   { name: "time", type: "time", map_to: "auto", time_format: ["%d", "%m", "%Y", "%H:%i"] },
+//   { name: "time", type: "duration", map_to: "auto", format: autoFormatter },
+// ];
 
 
-gantt.config.lightbox.sections = [
-  {
-    name: "description",
-    height: 70,
-    map_to: "text",
-    type: "textarea",
-    focus: true,
-  },
-  {
-    name: "type",
-    type: "typeselect",
-    map_to: "type",
-    filter: function (name, value) {
-      return !!(value != gantt.config.types.project);
-    },
-  },
-  {
-    name: "time",
-    type: "duration",
-    map_to: "auto",
-    formatter: durationFormatter,
-  },
-];
 gantt.config.lightbox.project_sections = [
   {
     name: "description",
@@ -622,6 +543,8 @@ gantt.config.lightbox.milestone_sections = [
     formatter: durationFormatter,
   },
 ];
+
+
 
 gantt.attachEvent("onColumnResizeStart", function (ind, column) {
   if (!column.tree || ind == 0) return;
@@ -728,109 +651,106 @@ var textFilter = "<input data-text-filter type='text' oninput='gantt.$doFilter(t
 //   { name: "duration", align: "center" }
 // ]
 
-// gantt.config.columns = [
-//   { name: "text", label: textFilter, tree: true, width: '*', resize: true },
-//   {
-//     name: "owner", align: "center", width: 75, label: "Lavoratore", template: function (task) {
-//       if (task.type == gantt.config.types.project) {
-//         return "";
-//       }
+gantt.config.columns = [
+  { name: "text", label: textFilter, tree: true, width: '200', resize: true },
+  // {
+  //   name: "owner", align: "center", width: 75, label: "Lavoratore", template: function (task) {
+  //     if (task.type == gantt.config.types.project) {
+  //       return "";
+  //     }
 
-//       const store = gantt.getDatastore("resource");
-//       const assignments = task[gantt.config.resource_property];
+  //     const store = gantt.getDatastore("resource");
+  //     const assignments = task[gantt.config.resource_property];
 
-//       if (!assignments || !assignments.length) {
-//         return "Unassigned";
-//       }
+  //     if (!assignments || !assignments.length) {
+  //       return "Unassigned";
+  //     }
 
-//       if (assignments.length == 1) {
-//         return store.getItem(assignments[0].resource_id).text;
-//       }
+  //     if (assignments.length == 1) {
+  //       return store.getItem(assignments[0].resource_id).text;
+  //     }
 
-//       let result = "";
-//       assignments.forEach(function (assignment) {
-//         const owner = store.getItem(assignment.resource_id);
-//         if (!owner)
-//           return;
-//         result += "<div class='owner-label' title='" + owner.text + "'>" + owner.text.substr(0, 1) + "</div>";
+  //     let result = "";
+  //     assignments.forEach(function (assignment) {
+  //       const owner = store.getItem(assignment.resource_id);
+  //       if (!owner)
+  //         return;
+  //       result += "<div class='owner-label' title='" + owner.text + "'>" + owner.text.substr(0, 1) + "</div>";
 
-//       });
+  //     });
 
-//       return result;
-//     }, resize: true
-//   },
-//   // {
-//   //   name: "text",
-//   //   tree: true,
-//   //   width: 190,
-//   //   resize: true,
-//   //   editor: textEditor,
-//   // },
-//   {
-//     label: "Data Inizio",
-//     name: "start_date",
-//     align: "center",
-//     resize: true,
-//     width: 80,
-//     editor: dateEditor,
-//   },
-
-//   {
-//     name: "duration",
-//     label: "Durata",
-//     resize: true,
-//     align: "center",
-//     template: function (task) {
-//       return autoFormatter.format(task.duration);
-//     },
-//     editor: durationEditor,
-//     width: 100,
-//   },
-//   // {
-//   //   name: "dayDuration",
-//   //   label: "Duration (days)",
-//   //   resize: true,
-//   //   align: "center",
-//   //   template: function (task) {
-//   //     return dayFormatter.format(task.duration);
-//   //   },
-//   //   editor: dayDurationEditor,
-//   //   width: 100,
-//   // },
-//   {
-//     name: "hourDuration",
-//     label: "Durata (ore)",
-//     resize: true,
-//     align: "center",
-//     template: function (task) {
-//       return hourFormatter.format(task.duration);
-//     },
-//     editor: hourDurationEditor,
-//     width: 100,
-//   },
-//   {
-//     name: "priority", label: "Priority", align: "center", template: function (obj) {
-//       if (obj.priority == 1) return "High";
-//       if (obj.priority == 2) return "Normal";
-//       return "Low";
-//     }
-//   },
-
-//   // {
-//   //   name: "progress",
-//   //   label: "Progress",
-//   //   align: "center",
-//   //   width: 80,
-//   //   resize: true,
-//   //   editor: progressEditor,
-//   //   template: function (task) {
-//   //     return Math.round(task.progress * 100) + "%";
-//   //   },
-//   // },
-//   { name: "add", width: 44 },
-// ];
+  //     return result;
+  //   }, resize: true
+  // },
+  // {
+  //   name: "text",
+  //   tree: true,
+  //   width: 190,
+  //   resize: true,
+  //   editor: textEditor,
+  // },
+  {
+    label: "Data Inizio",
+    name: "start_date",
+    align: "center",
+    resize: true,
+    width: 80,
+    editor: dateEditor,
+  },
+  {
+    name: "dayDuration", label: "Durata (giorni)", resize: true, align: "center", template: function (task) {
+      return dayFormatter.format(task.duration);
+    }, editor: dayDurationEditor, width: 100
+  },
+  {
+    name: "duration",
+    label: "Durata",
+    resize: true,
+    align: "center",
+    template: function (task) {
+      return autoFormatter.format(task.duration);
+    },
+    editor: durationEditor,
+    width: 100,
+  },
+  // {
+  //   name: "hourDuration",
+  //   label: "Durata (ore)",
+  //   resize: true,
+  //   align: "center",
+  //   template: function (task) {
+  //     return hourFormatter.format(task.duration);
+  //   },
+  //   editor: hourDurationEditor,
+  //   width: 100,
+  // },
+  // {
+  //   name: "priority", label: "Priority", align: "center", template: function (obj) {
+  //     if (obj.priority == 1) return "High";
+  //     if (obj.priority == 2) return "Normal";
+  //     return "Low";
+  //   }
+  // },
 
 
+  // {
+  //   name: "progress",
+  //   label: "Progress",
+  //   align: "center",
+  //   width: 80,
+  //   resize: true,
+  //   editor: progressEditor,
+  //   template: function (task) {
+  //     return Math.round(task.progress * 100) + "%";
+  //   },
+  // },
+  { name: "add", width: 44 },
+];
+
+gantt.config.lightbox.sections = [
+  { name: "description", height: 70, map_to: "text", type: "textarea", focus: true },
+  { name: "time", type: "duration", map_to: "auto", formatter: autoFormatter }
+];
 
 
 gantt.config.open_tree_initially = true;
@@ -854,10 +774,10 @@ gantt.event(navBar, "click", function (e) {
   }
 });
 
-gantt.templates.timeline_cell_class = function (task, date) {
-  if (!gantt.isWorkTime(date)) return "week_end";
-  return "";
-};
+// gantt.templates.timeline_cell_class = function (task, date) {
+//   if (!gantt.isWorkTime(date)) return "week_end";
+//   return "";
+// };
 
 let loadedTasks = 500; // Numero di record già caricati
 const tasksPerLoad = 500; // Numero di record da caricare ad ogni caricamento successivo
@@ -953,8 +873,6 @@ gantt.init("gantt_here")
 // });
 gantt.parse({ data: taskData.data, links: taskData.links });
 
-// loadGanttData()
-
 function updIcon(el) {
   el.parentElement.classList.toggle("checked_label");
 
@@ -965,7 +883,6 @@ function updIcon(el) {
 
   iconEl.textContent = iconEl.textContent == checked ? unchecked : checked;
   iconEl.classList.toggle(className);
-
 }
 
 

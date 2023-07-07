@@ -14,12 +14,12 @@
 // 	gantt.config.scale_height = 60;
 // 	gantt.config.work_time = true;
 
-// 	gantt.config.scales = [
-// 		{unit: "hour", step: 1, format: "%g"},
-// 		{unit: "minute", step: 10, format: "%i"},
-// 		{unit: "month", step: 1, format: "%F, %Y"},
-// 		{unit: "year", step: 1, format: "%Y"}
-// 	];
+gantt.config.scales = [
+  { unit: "hour", step: 1, format: "%g" },
+  { unit: "minute", step: 10, format: "%i" },
+  { unit: "month", step: 1, format: "%F, %Y" },
+  { unit: "year", step: 1, format: "%Y" }
+];
 
 
 // 	gantt.config.row_height = 22;

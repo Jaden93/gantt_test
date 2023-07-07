@@ -1,31 +1,45 @@
 // gantt.config.start_date = new Date("2022, 02, 02");
 // gantt.config.end_date = new Date(2022, 03, 25);
 gantt.setWorkTime({ hours: ["8:30-12:30", "13:30-17:30"] });
-gantt.config.min_column_width = 18;
-gantt.config.scale_height = 60;
+gantt.config.min_column_width = 20;
+gantt.config.scale_height = 70;
+gantt.config.time_step = 1;
 gantt.config.show_task_cells = false;
-gantt.config.smart_scales = true
 gantt.config.round_dnd_dates = false;
 //calculates duration in working hours and hides non-working time from the chart
 gantt.config.work_time = true;
-gantt.config.skip_off_time = true;
-gantt.config.duration_unit = "hour";
-gantt.config.fit_tasks = true;
+gantt.templates.scale_cell_class = function (date) {
+  if (!gantt.isWorkTime(date)) {
+    return "weekend";
+  }
+};
+gantt.templates.timeline_cell_class = function (task, date) {
+  if (!gantt.isWorkTime({ task: task, date: date })) {
+    return "weekend";
+  }
+};
+
+//rende tutto più lento
+gantt.config.skip_off_time = false;
+
+
+gantt.config.duration_unit = "minute";
+// gantt.config.fit_tasks = true;
 
 gantt.config.auto_types = true;
 gantt.config.date_format = "%Y-%m-%d %H:%i";
-// gantt.config.date_format = "%Y-%m-%d %H:%i:%s";
 
 gantt.config.duration_step = 1;
+// gantt.config.time_step = 1;
 
 //modalità per quando si hanno tante tasks che riguarda il riordinamento
-gantt.config.order_branch = "marker";
-gantt.config.order_branch_free = true;
+// gantt.config.order_branch = "marker";
+// gantt.config.order_branch_free = true;
 gantt.config.grid_resize = true;
 
 gantt.config.auto_scheduling_strict = true;
 gantt.config.static_background = true;
-// gantt.config.branch_loading = true;
+gantt.config.branch_loading = true;
 gantt.config.date_grid = "%Y-%m-%d %H:%i";
 
 

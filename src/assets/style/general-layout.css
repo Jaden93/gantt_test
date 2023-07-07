@@ -244,8 +244,8 @@
     opacity: 0.6;
   }
 
-  .week-end {
-    background-color: red;
+  .weekend {
+    background: grey!important;
   }
 
   .gantt_drag_marker.gantt_grid_resize_area {
