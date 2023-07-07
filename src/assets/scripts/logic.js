@@ -315,7 +315,7 @@ gantt.config.columns = [
     name: "start_date",
     align: "center",
     resize: true,
-    width: 80,
+    width: 120,
     editor: dateEditor,
   },
   {
@@ -371,9 +371,13 @@ gantt.config.columns = [
 gantt.config.scales = [
   { unit: "month", step: 1, format: "%F, %Y" },
   { unit: "day", step: 1, format: "%D, %d" },
-  { unit: "hour", step: 2, format: "%H" },
-  // { unit: "minute", step: 15, format: "%i" }
-];
+  { unit: "hour", step: 1, format: "%H" },
+  // { unit: "minute", step: 10, format: "%i" }
+
+]
+gantt.templates.task_time = function (start, end, task) {
+  return gantt.templates.task_date(start) + " - " + gantt.templates.task_end_date(end);
+};
 
 gantt.templates.timeline_cell_class = function (task, date) {
   // if (gantt.isWorkTime(date) == false && gantt.getWorkHours(date).length == 0)
