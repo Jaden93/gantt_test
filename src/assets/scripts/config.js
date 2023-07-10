@@ -30,7 +30,10 @@ gantt.config.time_step = 1; //Step minimo di spostamento task in minuti
 
 //#region optimazing configuration
 gantt.config.static_background = true;
-
+gantt.config.auto_scheduling_initial = false;
+gantt.config.auto_scheduling = true;
+gantt.config.auto_scheduling_strict = true
+gantt.config.auto_scheduling_compatibility = true; // rimuove i vincoli temporali
 
 //#endregion
 
@@ -60,9 +63,7 @@ gantt.config.static_background = true;
 // gantt.config.order_branch_free = true;
 // gantt.config.grid_resize = true;
 
-// gantt.config.auto_scheduling = true;
-// gantt.config.auto_scheduling_strict = true;
-// gantt.config.auto_scheduling_compatibility = true;
+
 // gantt.config.branch_loading = true;
 
 
