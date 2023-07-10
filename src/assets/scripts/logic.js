@@ -367,6 +367,29 @@ gantt.config.columns = [
   // },
   { name: "add", width: 44 },
 ];
+gantt.attachEvent("onAfterTaskUpdate",function(id,parent,tindex){
+  gantt.autoSchedule(id);
+})
+
+// gantt.attachEvent("onBeforeTaskAutoSchedule", function (task, start, link, predecessor) {
+//   // any custom logic here
+//   if (task.id == 2) return true
+//   return false;
+// });
+// gantt.attachEvent("onBeforeAutoSchedule", function () {
+//   gantt.message("Recalculating project schedule...");
+//   return true;
+// });
+
+gantt.attachEvent("onAfterTaskAutoSchedule", function (task, new_date, constraint, predecessor) {
+  if (task && predecessor) {
+    gantt.message({
+      text: "<b>" + task.text + "</b> has been rescheduled to " + gantt.templates.task_date(new_date) + " due to <b>" + predecessor.text + "</b> constraint",
+      expire: 6000
+    });
+  }
+});
+
 
 gantt.config.scales = [
   { unit: "month", step: 1, format: "%F, %Y" },
