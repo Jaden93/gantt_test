@@ -34,7 +34,7 @@ gantt.config.auto_scheduling_initial = false;
 gantt.config.auto_scheduling = true;
 gantt.config.auto_scheduling_strict = true
 gantt.config.auto_scheduling_compatibility = true; // rimuove i vincoli temporali
-
+// gantt.config.auto_scheduling_project_constraint = true
 //#endregion
 
 

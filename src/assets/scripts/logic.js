@@ -235,8 +235,8 @@ var autoFormatter = gantt.ext.formatters.durationFormatter({
 });
 const textEditor = { type: "text", map_to: "text" };
 var labels = gantt.locale.labels;
-labels.column_priority = labels.section_priority = "Priorità";
-labels.column_owner = labels.section_owner = "Owner";
+// labels.column_priority = labels.section_priority = "Priorità";
+// labels.column_owner = labels.section_owner = "Owner";
 
 // const ownerEditor = { type: "select", map_to: "textColor", options: owners };
 
@@ -381,6 +381,40 @@ gantt.config.columns = [
 // });
 
 
+// gantt.attachEvent("onAfterTaskDrag", function (id, mode, e) {
+//   //allows dragging if the global task index is even
+//   if (id == 50002) {
+
+//   }
+// });
+
+gantt.attachEvent("onAfterTaskDrag", function (id, mode) {
+  console.log(gantt.getTask(id))
+  // if (id == 50002) {
+  //   var linkedTask = gantt.getTask(1);
+  //   var taskMoved = gantt.getTask(id);
+
+  //   var linkEndDate = gantt.calculateEndDate(taskMoved.end_date, 0);
+  //   linkedTask.start_date = linkEndDate;
+  //   var duration = gantt.calculateEndDate(taskMoved.end_date, 60);
+  //   linkedTask.end_date = duration;
+
+  //   gantt.updateTask(linkedTask.id);
+    // gantt.autoSchedule(linkedTask.id);
+  // }
+});
+
+// gantt.attachEvent("onTaskLoading ", function (task) {
+  // console.log(task)
+  // let taskWithTargets = gantt.getTask(40000).$target
+  // taskWithTargets.forEach(element => {
+  //     gantt.getLink(element).color = "green";
+  //   });
+// })
+
+
+
+
 gantt.config.scales = [
   { unit: "month", step: 1, format: "%F, %Y" },
   { unit: "day", step: 1, format: "%D, %d" },
@@ -402,8 +436,18 @@ gantt.templates.timeline_cell_class = function (task, date) {
   // return "";
 };
 
-
 gantt.init("gantt_here")
 
-gantt.parse({ data: taskData.data, links: taskData.links });
+gantt.attachEvent("onTaskLoading", function (task) {
+  //any custom logic here
+  setTimeout(() => {
+      if (task.$target.length >= 2) {
+        task.$target.forEach(element => {
+          gantt.getLink(element).color = "green";
+        });    }
+    },10)
+  return true;
+});
+
+gantt.parse({ data: taskData.data, links: taskData.links, resource: taskData.resources });
 
