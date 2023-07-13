@@ -380,29 +380,49 @@ gantt.config.columns = [
 //   }
 // });
 
-
-// gantt.attachEvent("onAfterTaskDrag", function (id, mode, e) {
-//   //allows dragging if the global task index is even
-//   if (id == 50002) {
-
-//   }
-// });
-
 gantt.attachEvent("onAfterTaskDrag", function (id, mode) {
-  console.log(gantt.getTask(id))
-  // if (id == 50002) {
-  //   var linkedTask = gantt.getTask(1);
-  //   var taskMoved = gantt.getTask(id);
+  if (id == 50002) {
+    //task da muovere dinamicamente
+    var linkedTask = gantt.getTask(1);
+    //task da muovere per farsì che la linkedtask si sposti
+    var taskMoved = gantt.getTask(id);
 
-  //   var linkEndDate = gantt.calculateEndDate(taskMoved.end_date, 0);
-  //   linkedTask.start_date = linkEndDate;
-  //   var duration = gantt.calculateEndDate(taskMoved.end_date, 60);
-  //   linkedTask.end_date = duration;
+    var linkEndDate = gantt.calculateEndDate(taskMoved.end_date, 0);
+    linkedTask.start_date = linkEndDate;
+    //linkedTask mossa dinamicamnete a cavallo con l'end_date della taskMoved
+    var calculateEndDate = gantt.calculateEndDate(taskMoved.end_date, 60);
+    linkedTask.end_date = calculateEndDate;
 
-  //   gantt.updateTask(linkedTask.id);
-    // gantt.autoSchedule(linkedTask.id);
-  // }
+    var tasksWithSameResource = gantt.getTaskBy(function (task) {
+      return task.owner && task.owner.length > 0 && task.owner[0].resource_id === linkedTask.owner[0].resource_id;
+    });
+
+    var availableStartDate = calculateEndDate;
+    var isTaskInserted = false;
+
+    while (!isTaskInserted) {
+      var isOccupied = false;
+      tasksWithSameResource.forEach(function (task) {
+        var taskEndDate = gantt.calculateEndDate(task.start_date, task.duration);
+        if (task.start_date <= availableStartDate && availableStartDate <= taskEndDate) {
+          isOccupied = true;
+          availableStartDate = gantt.calculateEndDate(taskEndDate, 1, "minute");
+        }
+      });
+      if (!isOccupied) {
+        isTaskInserted = true;
+        linkedTask.start_date = availableStartDate;
+        linkedTask.end_date = gantt.calculateEndDate(availableStartDate, linkedTask.duration);
+      }
+    }
+
+    gantt.updateTask(linkedTask.id);
+    gantt.autoSchedule(linkedTask.id);
+  }
 });
+
+
+
 
 // gantt.attachEvent("onTaskLoading ", function (task) {
   // console.log(task)
@@ -444,9 +464,27 @@ gantt.attachEvent("onTaskLoading", function (task) {
       if (task.$target.length >= 2) {
         task.$target.forEach(element => {
           gantt.getLink(element).color = "green";
-        });    }
-    },10)
+
+        });
+      gantt.updateTask(task.id);
+
+      }
+    },1)
   return true;
+});
+
+
+gantt.attachEvent("onAfterTaskAutoSchedule", function (task, start, link, predecessor) {
+  // any custom logic here
+  // console.log(task.id)
+  // gantt.eachTask(function (element) {
+  //  if (task.id != element.id) {
+  //   console.log(element)
+  // }
+  // })
+  //  console.log(task.end_date); })
+  //
+  // if (task.id)
 });
 
 gantt.parse({ data: taskData.data, links: taskData.links, resource: taskData.resources });

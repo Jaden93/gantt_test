@@ -20,14 +20,15 @@ gantt.config.row_height = 30;
 gantt.config.date_format = "%Y-%m-%d %H:%i";
 gantt.config.round_dnd_dates = false; // Avvicina la fase all'intervallo di timescale più vicino
 gantt.config.date_grid = "%Y-%m-%d %H:%i"; // Formato della griglia di sinistra della data
+gantt.config.fit_tasks = true;
 
 gantt.setWorkTime({ hours: ["9:15-18:00"] });
-// gantt.setWorkTime({ hours: ["8:30-12:00", "13:00-17:30"] });
 gantt.setWorkTime({ day: 7, hours: false });
 gantt.setWorkTime({ day: 6, hours: false });
 gantt.config.duration_step = 1; //sets the number of 'gantt.config.duration_unit' units that will correspond to one unit of the 'duration' data
 gantt.config.time_step = 1; //Step minimo di spostamento task in minuti
-
+gantt.config.grid_elastic_columns = true;
+gantt.config.start_on_monday = true
 //#region optimazing configuration
 gantt.config.static_background = true;
 gantt.config.auto_scheduling_initial = false;

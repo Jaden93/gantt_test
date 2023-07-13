@@ -28,7 +28,7 @@ var resourceConfig = {
 
 					var totalDuration = 0;
 					for (var i = 0; i < tasks.length; i++) {
-						totalDuration += tasks[i].duration;
+						totalDuration += tasks[i].duration
 					}
 					return (totalDuration || 0) / 60 + "h";
 				}
@@ -36,56 +36,15 @@ var resourceConfig = {
 		],
 	};
 
-gantt.templates.resource_cell_class = function (start_date, end_date, resource, tasks) {
-	var css = [];
-	css.push("resource_marker");
-	if (tasks.length <= 1) {
-		css.push("workday_ok");
-	} else {
-		css.push("workday_over");
-	}
-	return css.join(" ");
-};
-
-
-
-// gantt.templates.resource_cell_value = function (start_date, end_date, resource, tasks) {
-// 	var cell_duration = gantt.calculateDuration({ start_date: start_date, end_date: end_date });
-
-// 	var result = 0;
-// 	tasks.forEach(function (item) {
-// 		var assignments = gantt.getResourceAssignments(resource.id, item.id);
-// 		assignments.forEach(function (assignment) {
-//       var task = gantt.getTask(assignment.task_id);
-// 			var hours_amount = 0;
-
-// 			if (+task.start_date <= +start_date && +task.end_date >= +end_date) {
-//         hours_amount += cell_duration;
-// 			}
-
-// 			else if (+task.start_date <= +start_date && +task.end_date >= +start_date && +task.end_date < +end_date) {
-// 				var left_duration = gantt.calculateDuration({ start_date: start_date, end_date: task.end_date });
-// 				hours_amount += left_duration;
-// 			}
-// 			//the task is in the right part
-// 			else if (+task.end_date >= +end_date && +task.start_date >= +start_date && +task.start_date < +end_date) {
-// 				var right_duration = gantt.calculateDuration({ start_date: task.start_date, end_date: end_date });
-// 				hours_amount += right_duration;
-// 			}
-// 			//the task is inside cell
-// 			else if (+task.start_date >= +start_date && +task.end_date <= +end_date) {
-// 				var task_duration = gantt.calculateDuration({ start_date: task.start_date, end_date: task.end_date });
-// 				hours_amount += task_duration;
-// 			}
-
-// 			result += assignment.value * hours_amount;
-// 		});
-// 	});
-
-// 	if (result % 1) {
-// 		result = Math.round(result * 10) / 10;
+// gantt.templates.resource_cell_class = function (start_date, end_date, resource, tasks) {
+// 	var css = [];
+// 	css.push("resource_marker");
+// 	if (tasks.length <= 1) {
+// 		css.push("workday_ok");
+// 	} else {
+// 		css.push("workday_over");
 // 	}
-// 	return "<div>" + result + "</div>";
+// 	return css.join(" ");
 // };
 
 let selectedResource = null;
@@ -221,8 +180,34 @@ gantt.config.layout = {
 
 
 gantt.templates.resource_cell_value = function (start_date, end_date, resource, tasks) {
-  return "<div>" + tasks.length * 1+'h'+"</div>";
+  return "<div>" + tasks.length+'h'+"</div>";
 };
+
+// gantt.templates.resource_cell_value = function (start_date, end_date, resource, tasks) {
+//   var totalMinutes = 0;
+
+//   tasks.forEach(function (task) {
+//     var taskStartDate = task.start_date;
+//     var taskEndDate = task.end_date;
+//     // var taskEndDate = gantt.calculateEndDate(task.start_date, task.duration);
+//     let startDateInMin = 60 - taskStartDate.getMinutes()
+//     let endDateInMin =  taskEndDate.getMinutes() - 60
+//     // var endDateDiffInMinutes = (end_date.getMinutes() -  taskEndDate.getMinutes());
+//     // console.log(end_date.getMinutes(),taskEndDate.getMinutes())
+//     // var taskDurationInMinutes = gantt.calculateDuration(taskStartDate, taskEndDate, "minute")  +  endDateDiffInMinutes;
+
+//     totalMinutes += startDateInMin;
+//   });
+
+//   var hours = Math.floor(totalMinutes / 60);
+//   var minutes = totalMinutes % 60;
+
+//   return "<div>" + hours + "h " + minutes + "m</div>";
+// };
+
+
+
+
 // 	// function shouldHighlightTask(task) {
 // 	// 		var store = gantt.$resourcesStore;
 // 	// 		var taskResource = task[gantt.config.resource_property],
@@ -232,15 +217,15 @@ gantt.templates.resource_cell_value = function (start_date, end_date, resource, 
 // 	// 		}
 // 	// 	}
 
-		gantt.templates.histogram_cell_class = function(start_date, end_date, resource, tasks) {
-			if(resource.$level === 1){
-				if (getAllocatedValue(tasks, resource) > getCapacity(start_date, resource)) {
-					return "column_overload";
-				}
-			}else if(resource.$level === 2){
-				return "resource_task_cell";
-			}
-		};
+		// gantt.templates.histogram_cell_class = function(start_date, end_date, resource, tasks) {
+		// 	if(resource.$level === 1){
+		// 		if (getAllocatedValue(tasks, resource) > getCapacity(start_date, resource)) {
+		// 			return "column_overload";
+		// 		}
+		// 	}else if(resource.$level === 2){
+		// 		return "resource_task_cell";
+		// 	}
+		// };
 
 	var resourceTemplates = {
 			grid_row_class: function(start, end, resource) {
